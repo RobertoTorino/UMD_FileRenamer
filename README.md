@@ -43,7 +43,7 @@
 
 > **If making changes to the repository make sure to run 'mvn clean package' first before running the app again.**              
 
-> **Locate the app here: [UMD_FileRenamer](./target)**                
+> **Locate the app here: [UMD_FileRenamer](./target) or download from here [Latest](https://github.com/RobertoTorino/UMD_FileRenamer/releases/tag/v1.0.0).**                
 
 ---
 
