@@ -6,6 +6,8 @@ package com.diegohp.umd.filerenamer.logic;
 
 import com.diegohp.umd.data.Umd;
 import com.diegohp.umd.data.UmdDAO;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
  */
 public class UmdRenamerLogic {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UmdRenamerLogic.class);
+    private static final Logger logger = LogManager.getLogger(UmdDAO.class);
     private UmdDAO umdDAO;
 
     /**

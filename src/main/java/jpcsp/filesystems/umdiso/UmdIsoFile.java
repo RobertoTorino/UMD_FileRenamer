@@ -16,12 +16,12 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.filesystems.umdiso;
 
+import jpcsp.filesystems.SeekableInputStream;
+
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.Date;
-
-import jpcsp.filesystems.SeekableInputStream;
 
 /**
  *
@@ -29,11 +29,11 @@ import jpcsp.filesystems.SeekableInputStream;
  */
 public class UmdIsoFile extends SeekableInputStream {
 	public static final int sectorLength = 2048;
-    private int startSectorNumber;
+    private final int startSectorNumber;
     private int currentSectorNumber;
     private long currentOffset;
-    private long maxOffset;
-    private Date timestamp;
+    private final long maxOffset;
+    private final Date timestamp;
     private String name;
 
     private byte[] currentSector;
@@ -54,7 +54,7 @@ public class UmdIsoFile extends SeekableInputStream {
         int endSectorNumber = startSectorNumber + (int) ((lengthInBytes + sectorLength - 1) / sectorLength);
         if (endSectorNumber >= reader.numSectors) {
         	endSectorNumber = reader.numSectors - 1;
-        	lengthInBytes = (endSectorNumber - startSector + 1) * sectorLength;
+        	lengthInBytes = (long) (endSectorNumber - startSector + 1) * sectorLength;
         }
 
         if (lengthInBytes == 0) {
@@ -184,7 +184,7 @@ public class UmdIsoFile extends SeekableInputStream {
     @Override
     public long readLong() throws IOException
     {
-        return ((readInt())&0xFFFFFFFFl) | (((long)readInt())<<32);
+        return ((readInt())& 0xFFFFFFFFL) | (((long)readInt())<<32);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class UmdIsoFile extends SeekableInputStream {
         int ch2 = read();
         if ((ch1 | ch2) < 0)
             throw new EOFException();
-        return (char)((ch1 << 8) + (ch2 << 0));
+        return (char)((ch1 << 8) + (ch2));
     }
 
     @Override

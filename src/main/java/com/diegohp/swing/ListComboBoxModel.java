@@ -2,23 +2,21 @@
 package com.diegohp.swing;
 
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
-import javax.swing.MutableComboBoxModel;
 
 /**
  * This class implements a {@link ComboBoxModel} based on a {@link List} as container.
- * 
+ *
  * @param <O> Class that defines the type of the container list.
- * 
+ *
  * @author diegohp (Diego Hernandez Perez) - <ahref="mailto:hp.diego@gmail.com">hp.diego@gmail.com</a>
  * @version 1.0
  */
 public final class ListComboBoxModel<O> extends AbstractListModel implements MutableComboBoxModel, Serializable {
-    
+
     private List<O> objects;
     private O selectedObject;
 
@@ -26,14 +24,14 @@ public final class ListComboBoxModel<O> extends AbstractListModel implements Mut
      * Constructs an empty DefaultComboBoxModel object.
      */
     public ListComboBoxModel() {
-        this.objects = new ArrayList<O>();
+        this.objects = new ArrayList<>();
     }
 
 
     /**
      * Constructs a DefaultComboBoxModel object initialized with
      * a List.
-     * 
+     *
      */
     public ListComboBoxModel(java.util.List<O> list) {
         this.objects.addAll(list);
@@ -82,8 +80,8 @@ public final class ListComboBoxModel<O> extends AbstractListModel implements Mut
     /**
      * Returns the index-position of the specified object in the list.
      *
-     * @param anObject  
-     * @return an integer representing the index position, where 0 is 
+     * @param anObject
+     * @return an integer representing the index position, where 0 is
      *         the first position
      */
     public int getIndexOf(Object anObject) {
@@ -139,7 +137,7 @@ public final class ListComboBoxModel<O> extends AbstractListModel implements Mut
      * Empties the list.
      */
     public void removeAllElements() {
-        if ( objects.size() > 0 ) {
+        if (!objects.isEmpty()) {
             int firstIndex = 0;
             int lastIndex = objects.size() - 1;
             objects.clear();
@@ -149,7 +147,7 @@ public final class ListComboBoxModel<O> extends AbstractListModel implements Mut
 	    selectedObject = null;
 	}
     }
-    
+
     public List<O> returnObjects(){
         return this.objects;
     }

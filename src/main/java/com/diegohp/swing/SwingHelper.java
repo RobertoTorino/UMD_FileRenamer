@@ -1,10 +1,9 @@
 
 package com.diegohp.swing;
 
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import java.io.File;
 
 /**
  * This class brings some shortcuts of Swing User-Interface components.
@@ -53,7 +52,7 @@ public final class SwingHelper {
      */
     public static String askForRequiredTextUsingInputDialog(String title, String message) {
         String text = null;
-        while (text == null || text.trim().equals("")) {
+        while (text == null || text.trim().isEmpty()) {
             text = JOptionPane.showInputDialog(null, message, title, JOptionPane.QUESTION_MESSAGE);
         }
         return text;
@@ -71,7 +70,7 @@ public final class SwingHelper {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle(title);
 
-        if (startDirectory != null && !startDirectory.trim().equals("")) {
+        if (startDirectory != null && !startDirectory.trim().isEmpty()) {
             chooser.setCurrentDirectory(new File(startDirectory));
         }
 
@@ -83,7 +82,7 @@ public final class SwingHelper {
 
         return null;
     }
-    
+
     /**
      * Displays a {@link JFileChooser} to select a directory.
      *
@@ -136,7 +135,7 @@ public final class SwingHelper {
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setDialogTitle(title);
 
-        if (fileExtension != null && !fileExtension.trim().equals("")) {
+        if (fileExtension != null && !fileExtension.trim().isEmpty()) {
             FileFilter filter = new FileFilter() {
 
                 @Override
@@ -153,11 +152,11 @@ public final class SwingHelper {
             chooser.setFileFilter(filter);
         }
 
-        if (startDirectory != null && !startDirectory.trim().equals("")) {
+        if (startDirectory != null && !startDirectory.trim().isEmpty()) {
             chooser.setCurrentDirectory(new File(startDirectory));
         }
 
-        if (startFile != null && !startFile.trim().equals("")) {
+        if (startFile != null && !startFile.trim().isEmpty()) {
             chooser.setSelectedFile(new File(startFile));
         }
 

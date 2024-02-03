@@ -16,13 +16,13 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.filesystems.umdiso.iso9660;
 
+import jpcsp.filesystems.umdiso.UmdIsoFile;
+import jpcsp.filesystems.umdiso.UmdIsoReader;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import jpcsp.filesystems.umdiso.UmdIsoFile;
-import jpcsp.filesystems.umdiso.UmdIsoReader;
 
 /**
  *
@@ -30,14 +30,14 @@ import jpcsp.filesystems.umdiso.UmdIsoReader;
  */
 public class Iso9660Directory {
 
-    private List<Iso9660File> files;
+    private final List<Iso9660File> files;
 
     public Iso9660Directory(UmdIsoReader r, int directorySector, int directorySize) throws IOException
     {
         // parse directory sector
         UmdIsoFile dataStream = new UmdIsoFile(r, directorySector, directorySize, null, null);
 
-        files = new ArrayList<Iso9660File>();
+        files = new ArrayList<>();
 
         byte[] b;
 

@@ -1,30 +1,31 @@
 package com.diegohp.umd.filerenamer;
 
+import com.diegohp.umd.data.UmdDAO;
 import com.diegohp.umd.renamer.ui.LanguageSelectorJDialog;
 import com.diegohp.umd.renamer.ui.RenamerJFrame;
-import javax.swing.UIManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
 
 /**
  * Hello world!
- *
  */
 public class App {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(App.class);
+    private static final Logger logger = LogManager.getLogger(UmdDAO.class);
 
     public static void main(String[] args) {
+        // Set the system property to opt-out of secure coding for restorable state
+        System.setProperty("apple.awt.application.supportsSecureRestorableState", "false");
+
+        // Your application logic go
         logger.info("Starting UMD_FileRenamer");
 
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //<editor-fold default state="collapsed" desc=" Look and feel setting code (optional) ">
         try {
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -32,18 +33,14 @@ public class App {
         /*
          * Create and display the form
          */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(() -> {
+            LanguageSelectorJDialog languageSelectorJFrame = new LanguageSelectorJDialog(new JFrame(), true);
+            languageSelectorJFrame.setVisible(true);
 
-            @Override
-            public void run() {
-                LanguageSelectorJDialog languageSelectorJFrame = new LanguageSelectorJDialog(new javax.swing.JFrame(), true);
-                languageSelectorJFrame.setVisible(true);
-                
-                RenamerJFrame renamerJFrame = new RenamerJFrame();
-                renamerJFrame.setVisible(true);
-                
-                renamerJFrame.askStartDirectory();
-            }
+            RenamerJFrame renamerJFrame = new RenamerJFrame();
+            renamerJFrame.setVisible(true);
+
+            renamerJFrame.askStartDirectory();
         });
     }
 }

@@ -16,31 +16,27 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.filesystems.umdiso;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
-import java.util.Date;
-import java.util.HashMap;
-
 import jpcsp.filesystems.umdiso.iso9660.Iso9660Directory;
 import jpcsp.filesystems.umdiso.iso9660.Iso9660File;
 import jpcsp.filesystems.umdiso.iso9660.Iso9660Handler;
 import jpcsp.util.Utilities;
-
 import org.bolet.jgz.Inflater;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.HashMap;
+
 /**
- * 
+ *
  * @author gigaherz
  */
 public class UmdIsoReader {
 
 	RandomAccessFile fileReader;
-	private HashMap<String, Iso9660File> fileCache = new HashMap<String, Iso9660File>();
-	private HashMap<String, Iso9660Directory> dirCache = new HashMap<String, Iso9660Directory>();
+	private final HashMap<String, Iso9660File> fileCache = new HashMap<>();
+	private final HashMap<String, Iso9660Directory> dirCache = new HashMap<>();
 
 	enum FileFormat {
 		Uncompressed, CompressedCSO, CompressedDAX, // not implemented yet
@@ -63,7 +59,7 @@ public class UmdIsoReader {
 
 	private int BytesToInt(byte[] bytes, int offset)
 			throws ArrayIndexOutOfBoundsException {
-		return Ubyte(bytes[offset + 0]) | (Ubyte(bytes[offset + 1]) << 8)
+		return Ubyte(bytes[offset]) | (Ubyte(bytes[offset + 1]) << 8)
 				| (Ubyte(bytes[offset + 2]) << 16) | (bytes[offset + 3] << 24);
 	}
 
@@ -74,7 +70,7 @@ public class UmdIsoReader {
 
 		/*
 		 * u32 'CISO' u32 0? u32 image size in bytes (why? it could have been
-		 * sectors and make thigns simpler!) u32 sector size? (00000800 = 2048 =
+		 * sectors and make things simpler!) u32 sector size? (00000800 = 2048 =
 		 * sector size) u32 ? (1) u32[] sector offsets (as many as image size /
 		 * sector size, I guess)
 		 */
@@ -106,7 +102,7 @@ public class UmdIsoReader {
 			fileReader.readFully(offsetData);
 
 			for (int i = 0; i <= numSectors; i++) {
-				sectorOffsets[i] = (BytesToInt(offsetData, i * 4)) & 0xFFFFFFFFl;
+				sectorOffsets[i] = (BytesToInt(offsetData, i * 4)) & 0xFFFFFFFFL;
 				if (i > 0) {
 					if ((sectorOffsets[i] & 0x7FFFFFFF) < (sectorOffsets[i - 1] & 0x7FFFFFFF)) {
 						throw new IOException("Invalid offset [" + i + "]: "
@@ -116,7 +112,7 @@ public class UmdIsoReader {
 			}
 		}
 
-		// when we reach here, we assume it's either a .ISO or a .CSO
+		// when we reach here, we assume it's either a .ISO or a .CSO,
 		// but we still need to make sure of that
 
 		id = new byte[6];
@@ -150,7 +146,7 @@ public class UmdIsoReader {
 
 	/**
 	 * Read sequential sectors into a byte array
-	 * 
+	 *
 	 * @param sectorNumber -
 	 *            the first sector to be read
 	 * @param numberSectors -
@@ -186,7 +182,7 @@ public class UmdIsoReader {
 
 	/**
 	 * Read one sector into a byte array
-	 * 
+	 *
 	 * @param sectorNumber -
 	 *            the sector number to be read
 	 * @param buffer -
@@ -211,7 +207,7 @@ public class UmdIsoReader {
 			long sectorOffset = sectorOffsets[sectorNumber];
 			long sectorEnd = sectorOffsets[sectorNumber + 1];
 
-			if ((sectorOffset & 0x80000000) != 0) {
+			if ((sectorOffset & 0x80000000L) != 0) {
 				long realOffset = (sectorOffset & 0x7fffffff) << offsetShift;
 
 				fileReader.seek(realOffset);
@@ -244,7 +240,7 @@ public class UmdIsoReader {
 				inf.readAll(buffer, offset, 2048);
 			} catch (IOException e) {
 				throw new IOException(
-						"Exception while uncompressing sector from " + fileName);
+						"Exception while uncompressed sector from " + fileName);
 			}
 
 			return;
@@ -255,7 +251,7 @@ public class UmdIsoReader {
 
 	/**
 	 * Read one sector
-	 * 
+	 *
 	 * @param sectorNumber -
 	 *            the sector number to be read
 	 * @return a new byte array of size sectorLength containing the sector
@@ -295,7 +291,7 @@ public class UmdIsoReader {
 
 		Iso9660Directory dir = new Iso9660Handler(this);
 
-		String[] path = filePath.split("[\\/]");
+		String[] path = filePath.split("\\/");
 
 		// walk through path
 		for (int i = 0; i < path.length;) {
@@ -361,9 +357,9 @@ public class UmdIsoReader {
 				throw new IOException("File '" + filePath
 						+ "': Invalid Start Sector");
 			}
-		} else if (filePath != null && filePath.length() == 0) {
+		} else if (filePath != null && filePath.isEmpty()) {
 			fileStart = 0;
-			fileLength = numSectors * 2048;
+			fileLength = numSectors * 2048L;
 		} else {
 			Iso9660File info = getFileEntry(filePath);
 			if (info != null) {
@@ -440,7 +436,7 @@ public class UmdIsoReader {
 		for (String file : files) {
 			String filePath = path + "/" + file;
 			Iso9660File info = null;
-			if (path.length() == 0) {
+			if (path.isEmpty()) {
 				filePath = file;
 			} else {
 				info = getFileEntry(filePath);
@@ -473,8 +469,6 @@ public class UmdIsoReader {
 		try {
 			String[] files = listDirectory("");
 			return getFileNameRecursive(fileStartSector, "", files);
-		} catch (FileNotFoundException e) {
-			// Ignore Exception
 		} catch (IOException e) {
 			// Ignore Exception
 		}
@@ -498,7 +492,7 @@ public class UmdIsoReader {
 				// out.println(file);
 				// out.flush();
 
-				if (path.length() == 0) {
+				if (path.isEmpty()) {
 					filePath = file;
 				}
 				// else
@@ -533,14 +527,14 @@ public class UmdIsoReader {
 
 	public void dumpIndexFile(String filename) throws IOException,
 			FileNotFoundException {
-		PrintWriter out = new PrintWriter(new FileOutputStream(filename));
+		PrintWriter out = new PrintWriter(Files.newOutputStream(Paths.get(filename)));
 		out.println("  Start    Size       Name");
 		String[] files = listDirectory("");
 		long size = dumpIndexRecursive(out, "", files);
 		out.println(String.format("Total Size %10d", size));
 		out.println(String.format("Image Size %10d", numSectors * 2048));
 		out.println(String.format("Missing    %10d (%d sectors)",
-				(numSectors * 2048) - size, numSectors - (size / 2048)));
+				(numSectors * 2048L) - size, numSectors - (size / 2048)));
 		out.close();
 	}
 }

@@ -6,16 +6,17 @@ import com.diegohp.swing.SwingHelper;
 import com.diegohp.umd.data.Umd;
 import com.diegohp.umd.data.UmdDAO;
 import com.diegohp.umd.filerenamer.logic.UmdRenamerLogic;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
-import javax.swing.ImageIcon;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -27,7 +28,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
      * Creates new form RenamerJFrame
      */
     public RenamerJFrame() {
-        
+
         this.umdRenamerLogic = new UmdRenamerLogic();
         this.umdRenamerLogic.setUmdDAO(new UmdDAO());
         this.umdListTableModel = new ListTableModel<Umd>() {
@@ -54,7 +55,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
             }
         };
 
-        List<String> columnsNames = new ArrayList<String>();
+        List<String> columnsNames = new ArrayList<>();
         ResourceBundle resourceBundle = ResourceBundle.getBundle("com/diegohp/umd/renamer/ui/resources");
         columnsNames.add(resourceBundle.getString("id"));
         columnsNames.add(resourceBundle.getString("title"));
@@ -65,24 +66,20 @@ public class RenamerJFrame extends javax.swing.JFrame {
         this.umdListTableModel.setColumnNames(columnsNames);
 
         this.initComponents();
-        
-        this.jTablePSPGames.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-            @Override
-            public void valueChanged(ListSelectionEvent lse) {
-                if(!lse.getValueIsAdjusting()){
-                    ListSelectionModel model = jTablePSPGames.getSelectionModel();
-                    if(model.getLeadSelectionIndex() >= 0){
-                        umdSelected = ((ListTableModel<Umd>)jTablePSPGames.getModel()).getObjectAt(model.getLeadSelectionIndex());
-                        loadSelectedUmd();
-                        jButtonUseTitleChanges.setEnabled(true);
-                        logger.info("Selected PSP game from table with ID = " + umdSelected.getId());
-                    }
+        this.jTablePSPGames.getSelectionModel().addListSelectionListener(lse -> {
+            if(!lse.getValueIsAdjusting()){
+                ListSelectionModel model = jTablePSPGames.getSelectionModel();
+                if(model.getLeadSelectionIndex() >= 0){
+                    umdSelected = ((ListTableModel<Umd>)jTablePSPGames.getModel()).getObjectAt(model.getLeadSelectionIndex());
+                    loadSelectedUmd();
+                    jButtonUseTitleChanges.setEnabled(true);
+                    logger.info("Selected PSP game from table with ID = " + umdSelected.getId());
                 }
             }
         });
     }
-    
+
     private void loadSelectedUmd(){
         if(this.umdSelected != null){
             logger.info("Loading PSP game with ID = " + this.umdSelected.getId());
@@ -95,7 +92,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
             }
             else{
                 logger.warn("No Icon0 found. Setting the default one to be displayed");
-                this.jLabelIcon0.setIcon(new ImageIcon(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png")));
+                this.jLabelIcon0.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png"))));
             }
         }
         else{
@@ -104,14 +101,14 @@ public class RenamerJFrame extends javax.swing.JFrame {
             this.jTextFieldTitle.setText("");
             this.jTextFieldVersion.setText("");
             this.jTextFieldFirmware.setText("");
-            this.jLabelIcon0.setIcon(new ImageIcon(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png")));
+            this.jLabelIcon0.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png"))));
         }
     }
 
     public void askStartDirectory() {
-        
+
         logger.info("Asking for directory were games files are located");
-        
+
         ResourceBundle resourceBundle = ResourceBundle.getBundle("com/diegohp/umd/renamer/ui/resources");
 
         File directoryTemp = SwingHelper.chooseDirectory(resourceBundle.getString("select_folder_containing_images"), this.startDirectory);
@@ -125,11 +122,12 @@ public class RenamerJFrame extends javax.swing.JFrame {
             this.jButtonUseTitleChanges.setEnabled(false);
             logger.info("Opening: " + this.startDirectory);
             this.jLabelActualFolder.setText(this.startDirectory.getPath());
-            
+
             String[] fileNames = this.startDirectory.list();
 
-            List<Umd> umdList = new ArrayList<Umd>();
+            List<Umd> umdList = new ArrayList<>();
 
+            assert fileNames != null;
             for (String fileName : fileNames) {
                 if (fileName.endsWith(".iso") || fileName.endsWith(".cso")) {
                     File file = new File(this.startDirectory + "/" + fileName);
@@ -163,34 +161,35 @@ public class RenamerJFrame extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold default-state="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanelInformation = new javax.swing.JPanel();
-        jLabelId = new javax.swing.JLabel();
+        JPanel jPanelInformation = new JPanel();
+        JLabel jLabelId = new JLabel();
         jTextFieldId = new javax.swing.JTextField();
-        jLabelTitle = new javax.swing.JLabel();
+        JLabel jLabelTitle = new JLabel();
         jTextFieldTitle = new javax.swing.JTextField();
-        jLabelVersion = new javax.swing.JLabel();
+        JLabel jLabelVersion = new JLabel();
         jTextFieldVersion = new javax.swing.JTextField();
-        jLabelFirmware = new javax.swing.JLabel();
+        JLabel jLabelFirmware = new JLabel();
         jTextFieldFirmware = new javax.swing.JTextField();
         jButtonUseTitleChanges = new javax.swing.JButton();
-        jPanelIcon = new javax.swing.JPanel();
+        JPanel jPanelIcon = new JPanel();
         jLabelIcon0 = new javax.swing.JLabel();
-        jPanelTableOfGames = new javax.swing.JPanel();
-        jLabelActualFolderLabel = new javax.swing.JLabel();
+        JPanel jPanelTableOfGames = new JPanel();
+        JLabel jLabelActualFolderLabel = new JLabel();
         jLabelActualFolder = new javax.swing.JLabel();
-        jButtonChangeFolder = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        JButton jButtonChangeFolder = new JButton();
+        JScrollPane jScrollPane1 = new JScrollPane();
         jTablePSPGames = new javax.swing.JTable();
         jButtonRenameAll = new javax.swing.JButton();
-        jLabelNote = new javax.swing.JLabel();
-        menuBar = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        exitMenuItem = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        JLabel jLabelNote = new JLabel();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu();
+        JMenuItem exitMenuItem = new JMenuItem();
+        JMenu helpMenu = new JMenu();
+        // Variables declaration - do not modify//GEN-BEGIN:variables
+        JMenuItem aboutMenuItem = new JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UMD File Renamer");
@@ -218,11 +217,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
 
         jButtonUseTitleChanges.setText(bundle.getString("use_title_changes")); // NOI18N
         jButtonUseTitleChanges.setEnabled(false);
-        jButtonUseTitleChanges.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonUseTitleChangesActionPerformed(evt);
-            }
-        });
+        jButtonUseTitleChanges.addActionListener(this::jButtonUseTitleChangesActionPerformed);
 
         org.jdesktop.layout.GroupLayout jPanelInformationLayout = new org.jdesktop.layout.GroupLayout(jPanelInformation);
         jPanelInformation.setLayout(jPanelInformationLayout);
@@ -276,7 +271,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
 
         jPanelIcon.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("psp_game_icon"))); // NOI18N
 
-        jLabelIcon0.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png"))); // NOI18N
+        jLabelIcon0.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png")))); // NOI18N
         jLabelIcon0.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         org.jdesktop.layout.GroupLayout jPanelIconLayout = new org.jdesktop.layout.GroupLayout(jPanelIcon);
@@ -304,11 +299,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
         jLabelActualFolder.setText(bundle.getString("no_folder_selected")); // NOI18N
 
         jButtonChangeFolder.setText(bundle.getString("change_folder")); // NOI18N
-        jButtonChangeFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonChangeFolderActionPerformed(evt);
-            }
-        });
+        jButtonChangeFolder.addActionListener(this::jButtonChangeFolderActionPerformed);
 
         jTablePSPGames.setModel(this.umdListTableModel);
         jTablePSPGames.setToolTipText(bundle.getString("app_do_not_change_game_properties")); // NOI18N
@@ -316,11 +307,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
 
         jButtonRenameAll.setText(bundle.getString("rename_all")); // NOI18N
         jButtonRenameAll.setEnabled(false);
-        jButtonRenameAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRenameAllActionPerformed(evt);
-            }
-        });
+        jButtonRenameAll.addActionListener(this::jButtonRenameAllActionPerformed);
 
         jLabelNote.setText(bundle.getString("app_do_not_change_game_properties")); // NOI18N
 
@@ -373,11 +360,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
 
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText(bundle.getString("exit")); // NOI18N
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
+        exitMenuItem.addActionListener(this::exitMenuItemActionPerformed);
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
@@ -387,11 +370,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
 
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText(bundle.getString("about")); // NOI18N
-        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aboutMenuItemActionPerformed(evt);
-            }
-        });
+        aboutMenuItem.addActionListener(this::aboutMenuItemActionPerformed);
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
@@ -466,8 +445,8 @@ public class RenamerJFrame extends javax.swing.JFrame {
                 this.umdRenamerLogic.rename(umd, this.startDirectory.getPath(), formattedName);
             }
             logger.info("All file renamed!");
-            this.umdListTableModel.fireTableDataChanged();            
-            SwingHelper.showInformationMessage(resourceBundle.getString("files_rename_sucess_title"), resourceBundle.getString("files_rename_sucess"));
+            this.umdListTableModel.fireTableDataChanged();
+            SwingHelper.showInformationMessage(resourceBundle.getString("files_rename_success_title"), resourceBundle.getString("files_rename_success"));
         }
         catch(Throwable t){
             logger.error("Error during renaming files.", t);
@@ -483,20 +462,16 @@ public class RenamerJFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
+        // Set the system property to opt-out of secure coding for restorable state
+        System.setProperty("apple.awt.application.supportsSecureRestorableState", "false");
         /*
          * Set the Nimbus look and feel
          */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //<editor-fold default-state="collapsed" desc=" Look and feel setting code (optional) ">
         try {
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -504,44 +479,23 @@ public class RenamerJFrame extends javax.swing.JFrame {
         /*
          * Create and display the form
          */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                new RenamerJFrame().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new RenamerJFrame().setVisible(true));
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JMenuItem exitMenuItem;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu helpMenu;
-    private javax.swing.JButton jButtonChangeFolder;
+
     private javax.swing.JButton jButtonRenameAll;
     private javax.swing.JButton jButtonUseTitleChanges;
     private javax.swing.JLabel jLabelActualFolder;
-    private javax.swing.JLabel jLabelActualFolderLabel;
-    private javax.swing.JLabel jLabelFirmware;
     private javax.swing.JLabel jLabelIcon0;
-    private javax.swing.JLabel jLabelId;
-    private javax.swing.JLabel jLabelNote;
-    private javax.swing.JLabel jLabelTitle;
-    private javax.swing.JLabel jLabelVersion;
-    private javax.swing.JPanel jPanelIcon;
-    private javax.swing.JPanel jPanelInformation;
-    private javax.swing.JPanel jPanelTableOfGames;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePSPGames;
     private javax.swing.JTextField jTextFieldFirmware;
     private javax.swing.JTextField jTextFieldId;
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JTextField jTextFieldVersion;
-    private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(RenamerJFrame.class);
-    private UmdRenamerLogic umdRenamerLogic;
-    private ListTableModel<Umd> umdListTableModel;
+    private static final Logger logger = LogManager.getLogger(UmdDAO.class);
+
+    private final UmdRenamerLogic umdRenamerLogic;
+    private final ListTableModel<Umd> umdListTableModel;
     private Umd umdSelected;
     private File startDirectory;
 }

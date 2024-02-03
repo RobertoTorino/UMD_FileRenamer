@@ -16,11 +16,11 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.filesystems.umdiso.iso9660;
 
+import jpcsp.filesystems.umdiso.UmdIsoReader;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import jpcsp.filesystems.umdiso.UmdIsoReader;
 
 /**
  *
@@ -28,7 +28,7 @@ import jpcsp.filesystems.umdiso.UmdIsoReader;
  */
 public class Iso9660Handler extends Iso9660Directory {
 
-    private Iso9660Directory internalDir;
+    private final Iso9660Directory internalDir;
 
     public Iso9660Handler(UmdIsoReader r) throws IOException
     {

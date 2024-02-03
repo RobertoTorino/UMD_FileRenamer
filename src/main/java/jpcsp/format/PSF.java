@@ -16,20 +16,13 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.format;
 
-import static jpcsp.util.Utilities.readStringZ;
-import static jpcsp.util.Utilities.readUByte;
-import static jpcsp.util.Utilities.readUHalf;
-import static jpcsp.util.Utilities.readUWord;
-import static jpcsp.util.Utilities.writeByte;
-import static jpcsp.util.Utilities.writeHalf;
-import static jpcsp.util.Utilities.writeStringZ;
-import static jpcsp.util.Utilities.writeWord;
+import jpcsp.util.Utilities;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 
-import jpcsp.util.Utilities;
+import static jpcsp.util.Utilities.*;
 
 public class PSF {
     private int psfOffset;
@@ -44,7 +37,7 @@ public class PSF {
     private int valueTableOffset;
     private int indexEntryCount;
 
-    private LinkedList<PSFKeyValuePair> pairList;
+    private final LinkedList<PSFKeyValuePair> pairList;
 
     public final static int PSF_IDENT = 0x46535000;
 
@@ -62,7 +55,7 @@ public class PSF {
         ident = PSF_IDENT;
         version = 0x0101;
 
-        pairList = new LinkedList<PSFKeyValuePair>();
+        pairList = new LinkedList<>();
 
     }
 
@@ -344,10 +337,10 @@ public class PSF {
         sb.append("\nentries:\n");
         */
         for (PSFKeyValuePair pair : pairList) {
-            sb.append(pair.toString() + "\n");
+            sb.append(pair.toString()).append("\n");
         }
 
-        sb.append("probably homebrew? " + isLikelyHomebrew());
+        sb.append("probably homebrew? ").append(isLikelyHomebrew());
 
         return sb.toString();
     }
@@ -368,8 +361,8 @@ public class PSF {
         String psp_system_ver = getString("PSP_SYSTEM_VER");
         Integer parental_level = (Integer)get("PARENTAL_LEVEL");
 
-        Integer ref_one = new Integer(1);
-        Integer ref_region = new Integer(32768);
+        Integer ref_one = Integer.valueOf(1);
+        Integer ref_region = Integer.valueOf(32768);
 
         if (safeEquals(disc_version, "1.00") &&
             safeEquals(disc_id, "UCJS10041") && // loco roco demo, should not false positive since that demo has sys ver 3.40
@@ -455,7 +448,6 @@ public class PSF {
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder();
 
             /*
             sb.append("index entry:\n");
@@ -470,9 +462,7 @@ public class PSF {
             //sb.append(String.format("[offset=%08X] '%s' = [offset=%08X,len=%d,rawlen=%d] '" + data + "'",
             //    keyOffset, key, valueOffset, dataSize, dataSizePadded));
 
-            sb.append(key + " = " + data);
-
-            return sb.toString();
+            return key + " = " + data;
         }
     }
 }

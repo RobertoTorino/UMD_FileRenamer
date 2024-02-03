@@ -1,1 +1,40 @@
-/target/
+# Configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Avoid ignoring files
+!target/UMD_FileRenamer-1.0.jar
+!target/UMD_FileRenamer-1.0-jar-with-dependencies.zip
+!/.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ
+/.idea/
+!/target
