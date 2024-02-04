@@ -1,0 +1,10 @@
+jpcsp.util
+jpcsp.format
+jpcsp.filesystems
+jpcsp.filesystems.umdiso
+jpcsp.filesystems.umdiso.iso9660
+com.diegohp.umd.filerenamer.logic
+com.diegohp.umd.filerenamer
+com.diegohp.umd.renamer.ui
+com.diegohp.umd.data
+com.diegohp.swing

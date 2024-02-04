@@ -16,21 +16,17 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.filesystems;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- *
- * @author gigaherz
+ * A SeekableInputStream that extends InputStream and implements SeekableDataInput.
+ * @author gigaherz: community developer for psp and other consoles.
  */
+
 public abstract class SeekableInputStream extends InputStream implements SeekableDataInput {
-
-
-    @Override
-    abstract public void seek(long position) throws IOException;
-
-    @Override
-    abstract public long length() throws IOException;
 
     @Override
     abstract public int read() throws IOException;
@@ -66,16 +62,10 @@ public abstract class SeekableInputStream extends InputStream implements Seekabl
     abstract public char readChar() throws IOException;
 
     @Override
-    abstract public String readUTF() throws IOException;
+    abstract public void readFully(byte @NotNull [] b, int off, int len) throws IOException;
 
     @Override
-    abstract public String readLine() throws IOException;
-
-    @Override
-    abstract public void readFully(byte[] b, int off, int len) throws IOException;
-
-    @Override
-    abstract public void readFully(byte[] b) throws IOException;
+    abstract public void readFully(byte @NotNull [] b) throws IOException;
 
     @Override
     abstract public int skipBytes(int bytes) throws IOException;

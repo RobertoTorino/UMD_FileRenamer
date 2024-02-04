@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  *
- * @author gigaherz
+ * @author gigaherz: community developer for psp and other consoles.
  */
 public class Iso9660Directory {
 
@@ -35,7 +35,7 @@ public class Iso9660Directory {
     public Iso9660Directory(UmdIsoReader r, int directorySector, int directorySize) throws IOException
     {
         // parse directory sector
-        UmdIsoFile dataStream = new UmdIsoFile(r, directorySector, directorySize, null, null);
+        UmdIsoFile dataStream = new UmdIsoFile(r, directorySector, directorySize);
 
         files = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class Iso9660Directory {
             b = new byte[entryLength-1];
             dataStream.read(b);
 
-            Iso9660File file = new Iso9660File(b,b.length);
+            Iso9660File file = new Iso9660File(b);
             files.add(file);
         }
     }

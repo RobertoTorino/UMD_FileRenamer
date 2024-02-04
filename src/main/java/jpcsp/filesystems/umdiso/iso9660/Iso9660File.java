@@ -16,14 +16,15 @@ along with Jpcsp.  If not, see <http://www.gnu.org/licenses/>.
  */
 package jpcsp.filesystems.umdiso.iso9660;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 /**
  *
- * @author gigaherz
+ * @author gigaherz: community developer for psp and other consoles.
  */
 public class Iso9660File {
 
@@ -32,111 +33,81 @@ public class Iso9660File {
     private final int fileProperties;
     // padding: byte[3]
     private String fileName; //[128+1];
-    //Iso9660Date date; // byte[7]
-    private final Date timestamp;
 
-    private int Ubyte(byte b)
-    {
-        return (b)&255;
+    private int Ubyte(byte b) {
+        return (b) & 255;
     }
 
-    public Iso9660File(byte[] data, int length) throws IOException
-    {
+    public Iso9660File(byte[] data) throws IOException {
 
-        /*
- -- 1           Length of Directory Record (LEN-DR) -- read by the Iso9660Directory
-2           Extended Attribute Record Length
-3 to 10     Location of Extent
-11 to 18    Data Length
-19 to 25    Recording Date and Time
-26          File Flags
-27          File Unit Size
-28          Interleave Gap Size
-29 to 32    Volume Sequence Number
-33          Length of File Identifier (LEN_FI)
-34 to (33+LEN_FI)   File Identifier
-(34 + LEN_FI)   Padding Field
-
-*/
-
-        fileLBA = Ubyte(data[1]) | (Ubyte(data[2])<<8) | (Ubyte(data[3])<<16) | (data[4]<<24);
-        fileSize = Ubyte(data[9]) | (Ubyte(data[10])<<8) | (Ubyte(data[11])<<16) | (data[12]<<24);
+        fileLBA = Ubyte(data[1]) | (Ubyte(data[2]) << 8) | (Ubyte(data[3]) << 16) | (data[4] << 24);
+        fileSize = Ubyte(data[9]) | (Ubyte(data[10]) << 8) | (Ubyte(data[11]) << 16) | (data[12] << 24);
         int year = Ubyte(data[17]);
         int month = Ubyte(data[18]);
         int day = Ubyte(data[19]);
         int hour = Ubyte(data[20]);
         int minute = Ubyte(data[21]);
         int second = Ubyte(data[22]);
-        int gmtOffset = data[23]; // Offset from Greenwich Mean Time in number of 15 min intervals from -48 (West) to + 52 (East)
-
-        int gmtOffsetHours = gmtOffset / 4;
-        int gmtOffsetMinutes = (gmtOffset % 4) * 15;
-        // Build TimeZone name as e.g.
-        //   "GMT+1015", meaning GMT + 10 hours and 15 minutes
-        String timeZoneName = "GMT";
-        if (gmtOffset >= 0) {
-        	timeZoneName += "+";
-        }
-        timeZoneName += gmtOffsetHours;
-        if (gmtOffsetMinutes > 0) {
-        	if (gmtOffsetMinutes < 10) {
-        		timeZoneName += "0";
-        	}
-        	timeZoneName += gmtOffsetMinutes;
-        }
+        String timeZoneName = getString(data);
         TimeZone timeZone = TimeZone.getTimeZone(timeZoneName);
 
         Calendar timestampCalendar = Calendar.getInstance(timeZone);
         timestampCalendar.set(1900 + year, month - 1, day, hour, minute, second);
-        timestamp = timestampCalendar.getTime();
+        timestampCalendar.getTime();
 
         fileProperties = data[24];
 
-        if((fileLBA<0)||(fileSize<0))
-        {
+        if ((fileLBA < 0) || (fileSize < 0)) {
             throw new IOException("WTF?! Size or lba < 0?!");
         }
 
         int fileNameLength = data[31];
 
-        fileName="";
-        for(int i=0;i<fileNameLength;i++)
-        {
-            char c =(char)(data[32+i]);
-            if(c==0) c='.';
+        fileName = "";
+        for (int i = 0; i < fileNameLength; i++) {
+            char c = (char) (data[32 + i]);
+            if (c == 0) c = '.';
 
             fileName += c;
         }
-
     }
 
-    public int getLBA()
-    {
+    @NotNull
+    private static String getString(byte[] data) {
+        int gmtOffset = data[23];
+
+        int gmtOffsetHours = gmtOffset / 4;
+        int gmtOffsetMinutes = (gmtOffset % 4) * 15;
+
+        String timeZoneName = "GMT";
+        if (gmtOffset >= 0) {
+            timeZoneName += "+";
+        }
+        timeZoneName += gmtOffsetHours;
+        if (gmtOffsetMinutes > 0) {
+            timeZoneName += gmtOffsetMinutes;
+        }
+        return timeZoneName;
+    }
+
+    public int getLBA() {
         return fileLBA;
     }
 
-    public int getSize()
-    {
+    public int getSize() {
         return fileSize;
     }
 
-    public int getProperties()
-    {
+    public int getProperties() {
         return fileProperties;
     }
 
-    public String getFileName()
-    {
+    public String getFileName() {
         return fileName;
     }
 
-    public Date getTimestamp()
-    {
-    	return timestamp;
+    @Override
+    public String toString() {
+        return fileName;
     }
-
-	@Override
-	public String toString() {
-		return fileName;
-	}
 }

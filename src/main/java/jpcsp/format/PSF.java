@@ -326,16 +326,6 @@ public class PSF {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        /*
-        sb.append("header:\n");
-        sb.append(String.format("ident 0x%08X %d\n", ident, ident));
-        sb.append(String.format("version 0x%08X %d\n", version, version));
-        sb.append(String.format("keyTableOffset 0x%08X %d\n", keyTableOffset, keyTableOffset));
-        sb.append(String.format("valueTableOffset 0x%08X %d\n", valueTableOffset, valueTableOffset));
-        sb.append(String.format("indexEntryCount 0x%08X %d\n", indexEntryCount, indexEntryCount));
-
-        sb.append("\nentries:\n");
-        */
         for (PSFKeyValuePair pair : pairList) {
             sb.append(pair.toString()).append("\n");
         }
@@ -448,19 +438,6 @@ public class PSF {
 
         @Override
         public String toString() {
-
-            /*
-            sb.append("index entry:\n");
-            sb.append(String.format("keyOffset 0x%08X %d\n", keyOffset, keyOffset));
-            sb.append(String.format("unknown1 0x%08X %d\n", unknown1, unknown1));
-            sb.append(String.format("dataType 0x%08X %d\n", dataType, dataType));
-            sb.append(String.format("dataSize 0x%08X %d\n", dataSize, dataSize));
-            sb.append(String.format("dataSizePadding 0x%08X %d\n", dataSizePadding, dataSizePadding));
-            sb.append(String.format("valueOffset 0x%08X %d\n", valueOffset, valueOffset));
-            */
-
-            //sb.append(String.format("[offset=%08X] '%s' = [offset=%08X,len=%d,rawlen=%d] '" + data + "'",
-            //    keyOffset, key, valueOffset, dataSize, dataSizePadded));
 
             return key + " = " + data;
         }

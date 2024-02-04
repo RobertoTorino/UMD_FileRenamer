@@ -19,8 +19,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
- *
- * @author diegohp
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
  */
 public class RenamerJFrame extends javax.swing.JFrame {
 

@@ -24,7 +24,7 @@ import java.io.IOException;
 
 /**
  *
- * @author gigaherz
+ * @author gigaherz: community developer for psp and other consoles.
  */
 public class Iso9660Handler extends Iso9660Directory {
 
@@ -42,7 +42,7 @@ public class Iso9660Handler extends Iso9660Directory {
         byte[] b = new byte[38];
 
         byteStream.read(b);
-        Iso9660File rootDirEntry = new Iso9660File(b,b.length);
+        Iso9660File rootDirEntry = new Iso9660File(b);
 
         int rootLBA = rootDirEntry.getLBA();
         int rootSize = rootDirEntry.getSize();

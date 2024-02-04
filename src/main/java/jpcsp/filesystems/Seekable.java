@@ -20,13 +20,12 @@ import java.io.IOException;
 
 /**
  *
- * @author gigaherz
+ * @author gigaherz: community developer for psp and other consoles.
  */
 public interface Seekable {
 
-    public long length() throws IOException;
+    long length() throws IOException;
 
-    public void seek(long position) throws IOException;
+    void seek(long position) throws IOException;
 
-    public long getFilePointer() throws IOException;
 }

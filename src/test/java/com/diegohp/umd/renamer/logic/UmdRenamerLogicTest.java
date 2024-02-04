@@ -4,7 +4,6 @@
  */
 package com.diegohp.umd.renamer.logic;
 
-
 import com.diegohp.umd.data.Umd;
 import com.diegohp.umd.data.UmdDAO;
 import com.diegohp.umd.filerenamer.logic.UmdRenamerLogic;
@@ -16,8 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
- * @author diegohp
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
  */
 public class UmdRenamerLogicTest extends TestCase {
 
@@ -77,9 +75,5 @@ public class UmdRenamerLogicTest extends TestCase {
         assertFalse((new File(cubeFilePath)).exists());
         assertTrue(umd.getFile().exists());
         System.out.println("New file: " + umd.getFile().getPath());
-
     }
-
-
-
 }

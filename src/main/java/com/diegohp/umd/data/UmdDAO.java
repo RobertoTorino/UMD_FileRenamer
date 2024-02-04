@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * @author diegohp
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
  */
 public class UmdDAO {
 
@@ -39,7 +39,11 @@ public class UmdDAO {
 
                 UmdIsoFile paramSfo = iso.getFile("PSP_GAME/param.sfo");
                 byte[] sfo = new byte[(int) paramSfo.length()];
-                paramSfo.read(sfo);
+                int bytesRead = paramSfo.read(sfo);
+                if (bytesRead == -1) {
+                    // Handle the case where no bytes were read
+                    throw new IOException("Failed to read from param.sfo");
+                }
                 paramSfo.close();
                 ByteBuffer buf = ByteBuffer.wrap(sfo);
                 psf.read(buf);
@@ -48,7 +52,11 @@ public class UmdDAO {
                 try {
                     UmdIsoFile icon0umd = iso.getFile("PSP_GAME/ICON0.PNG");
                     icon0 = new byte[(int) icon0umd.length()];
-                    icon0umd.read(icon0);
+                    int bytesReadIcon0 = icon0umd.read(icon0);
+                    if (bytesReadIcon0 == -1) {
+                        // Handle the case where no bytes were read
+                        throw new IOException("Failed to read from ICON0.PNG");
+                    }
                     icon0umd.close();
                 } catch (FileNotFoundException e) {
                     logger.warn(e.getMessage());
@@ -73,12 +81,9 @@ public class UmdDAO {
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage(), e);
             // default icon
-            //icons[rowIndex] = new ImageIcon(getClass().getResource("/jpcsp/images/icon0.png"));
-        } catch (IOException e) {
-            throw e;
+            // icons[rowIndex] = new ImageIcon(getClass().getResource("/jpcsp/images/icon0.png"));
         }
 
         return null;
     }
 }
-

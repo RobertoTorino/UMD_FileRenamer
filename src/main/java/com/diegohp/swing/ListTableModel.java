@@ -8,10 +8,8 @@ import java.util.List;
 
 /**
  * This class defines a {@link TableModel} based on a {@link List} as container.
- *
  * @param <O> Class that defines the type of the container list.
- *
- * @author diegohp (Diego Hernandez Perez) - <ahref="mailto:hp.diego@gmail.com">hp.diego@gmail.com</a>
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
  * @version 1.0
  */
 public abstract class ListTableModel<O> extends AbstractTableModel {
@@ -24,15 +22,6 @@ public abstract class ListTableModel<O> extends AbstractTableModel {
         this.objects = new ArrayList<>();
     }
 
-    public ListTableModel(List<O> objects) {
-        this.objects.addAll(objects);
-    }
-
-    public void addObject(O object) {
-        this.objects.add(object);
-        this.fireTableDataChanged();
-    }
-
     public void addObjectList(List<O> objects) {
         this.objects.addAll(objects);
         this.fireTableDataChanged();
@@ -42,12 +31,6 @@ public abstract class ListTableModel<O> extends AbstractTableModel {
         return this.objects.get(row);
     }
 
-    public O removeObjectAt(int row) {
-        O object = this.objects.remove(row);
-        this.fireTableDataChanged();
-        return object;
-    }
-
     public void removeAllObjects() {
         this.objects.clear();
         this.fireTableDataChanged();
@@ -55,13 +38,11 @@ public abstract class ListTableModel<O> extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        //throw new UnsupportedOperationException("Not supported yet.");
         return this.objects.size();
     }
 
     @Override
     public int getColumnCount() {
-        //throw new UnsupportedOperationException("Not supported yet.");
         return this.columnNames.size();
     }
 

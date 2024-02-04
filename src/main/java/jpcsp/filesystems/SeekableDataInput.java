@@ -21,7 +21,7 @@ import java.io.DataInput;
 
 /**
  *
- * @author gigaherz
+ * @author gigaherz: community developer for psp and other consoles.
  */
 public interface SeekableDataInput extends DataInput,Seekable,Closeable {
 

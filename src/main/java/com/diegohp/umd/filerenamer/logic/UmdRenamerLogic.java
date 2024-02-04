@@ -6,26 +6,25 @@ package com.diegohp.umd.filerenamer.logic;
 
 import com.diegohp.umd.data.Umd;
 import com.diegohp.umd.data.UmdDAO;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
- *
- * @author diegohp
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
  */
 public class UmdRenamerLogic {
 
-    private static final Logger logger = LogManager.getLogger(UmdDAO.class);
+    static {
+        LogManager.getLogger(UmdDAO.class);
+    }
+
     private UmdDAO umdDAO;
 
     /**
-     *
-     * @param file
-     * @return
-     * @throws IOException
+     * @param file the fileName to set
+     * @throws IOException if an I/O error occurs while reading the sector
      */
     public Umd getUmd(File file) throws IOException {
         if (file != null && !file.isDirectory()) {
@@ -34,83 +33,23 @@ public class UmdRenamerLogic {
         return null;
     }
 
-    /**
-     *
-     * @param path
-     * @return
-     * @throws IOException
-     */
-    public List<Umd> getUmdList(File path) throws IOException {
-
-        File[] files = path.listFiles(new FileFilter() {
-
-            @Override
-            public boolean accept(File file) {
-                String lower = file.getName().toLowerCase();
-                if (lower.endsWith(".cso") || lower.endsWith(".iso")) {
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        List<Umd> list = new ArrayList<Umd>();
-
-        for (File f : files) {
-            Umd umd = this.getUmd(f);
-            if (umd != null) {
-                list.add(umd);
-            }
-        }
-
-        return list;
-
-    }
-
     public String getFormattedName(Umd umd) {
         String name = umd.getTitle() + " (" + umd.getId().substring(0, 4) + "-" + umd.getId().substring(4) + ")";
         String invalidChars = "\\/:*?\"<>|™";
-        for(Character c : invalidChars.toCharArray()){
+        for (Character c : invalidChars.toCharArray()) {
             name = name.replace(c.toString(), "");
         }
         return name;
     }
 
-    public String getFormattedName(Umd umd, String format) {
-        return "";
-    }
-
     public void rename(Umd umd, String folder, String newFileName) {
         File newFile = new File(folder + File.separator + newFileName + umd.getExtension());
-        umd.getFile().renameTo(newFile);
-        umd.setFile(newFile);
-    }
 
-    private void copyFile(String inFile, String outFile) {
-        try {
-            File f1 = new File(inFile);
-            File f2 = new File(outFile);
-            InputStream in = new FileInputStream(f1);
-
-            //For Append the file.
-            //  OutputStream out = new FileOutputStream(f2,true);
-
-            //For Overwrite the file.
-            OutputStream out = new FileOutputStream(f2);
-
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-            System.out.println("File copied.");
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.getMessage() + " in the specified directory.");
-            System.exit(0);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        // Check if the renaming was successful
+        if (umd.getFile().renameTo(newFile)) {
+            umd.setFile(newFile);
+        } else {
+            System.err.println("Failed to rename file: " + umd.getFile().getPath());
         }
     }
 

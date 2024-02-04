@@ -241,33 +241,6 @@ public class Utilities {
         return ++n;
     }
 
-    /*
-         public static void readFully(SeekableDataInput input, int address, int length) throws IOException {
-             final int blockSize = 1024 * 1024;  // 1Mb
-             while (length > 0) {
-                 int size = Math.min(length, blockSize);
-                 byte[] buffer = new byte[size];
-                 input.readFully(buffer);
-                 Memory.getInstance().copyToMemory(address, ByteBuffer.wrap(buffer), size);
-                 address += size;
-                 length -= size;
-             }
-         }
-
-         public static void write(SeekableRandomFile output, int address, int length) throws IOException {
-             Buffer buffer = Memory.getInstance().getBuffer(address, length);
-             if (buffer instanceof ByteBuffer) {
-                 output.getChannel().write((ByteBuffer) buffer);
-             } else if (length > 0) {
-                 byte[] bytes = new byte[length];
-                 IMemoryReader memoryReader = MemoryReader.getMemoryReader(address, length, 1);
-                 for (int i = 0; i < length; i++) {
-                     bytes[i] = (byte) memoryReader.readNext();
-                 }
-                 output.write(bytes);
-             }
-         }
-    */
     public static void bytePositionBuffer(Buffer buffer, int bytePosition) {
         buffer.position(bytePosition / bufferElementSize(buffer));
     }
@@ -287,29 +260,6 @@ public class Utilities {
 
         return s;
     }
-/*
-    public static void putBuffer(ByteBuffer destination, Buffer source, ByteOrder sourceByteOrder) {
-        // Set the destination to the desired ByteOrder
-		ByteOrder order = destination.order();
-		destination.order(sourceByteOrder);
-
-		if (source instanceof IntBuffer) {
-    		destination.asIntBuffer().put((IntBuffer) source);
-    	} else if (source instanceof ShortBuffer) {
-    		destination.asShortBuffer().put((ShortBuffer) source);
-    	} else if (source instanceof ByteBuffer) {
-    		destination.put((ByteBuffer) source);
-    	} else if (source instanceof FloatBuffer) {
-    		destination.asFloatBuffer().put((FloatBuffer) source);
-    	} else {
-    		Modules.log.error("Utilities.putBuffer: Unsupported Buffer type " + source.getClass().getName());
-    		Emulator.PauseEmuWithStatus(Emulator.EMU_STATUS_UNIMPLEMENTED);
-    	}
-
-		// Reset the original ByteOrder of the destination
-		destination.order(order);
-    }
-*/
 
     /**
      * Reads input-stream i into a String with the UTF-8 charset
@@ -359,18 +309,4 @@ public class Utilities {
     public static long makeValue64(int low32, int high32) {
         return (((long) high32) << 32) | ((low32) & 0xFFFFFFFFL);
     }
-/*
-    public static void storeRegister64(CpuState cpu, int register, long value) {
-    	cpu.gpr[register    ] = (int) (value      );
-    	cpu.gpr[register + 1] = (int) (value >> 32);
-    }
-
-    public static void returnRegister64(CpuState cpu, long value) {
-    	storeRegister64(cpu, 2, value);
-    }
-
-    public static long getRegister64(CpuState cpu, int register) {
-    	return makeValue64(cpu.gpr[register], cpu.gpr[register + 1]);
-    }
-*/
 }

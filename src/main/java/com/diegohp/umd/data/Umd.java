@@ -7,19 +7,18 @@ package com.diegohp.umd.data;
 import java.io.File;
 
 /**
- *
- * @author diegohp
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
  */
 public class Umd {
-    
+
     private String id;
     private String title;
     private String version;
     private String firmware;
     private byte[] icon0;
     private File file;
-    
-    
+
+
     public Umd(){
         this.id = "";
         this.title = "";
@@ -51,7 +50,9 @@ public class Umd {
     }
 
     /**
-     * @param title the title to set
+     * Sets the title of the UMD.
+     *
+     * @param title the title to set; must not be null.
      */
     public void setTitle(String title) {
         this.title = title;
@@ -65,7 +66,9 @@ public class Umd {
     }
 
     /**
-     * @param version the version to set
+     * Sets the version of the UMD.
+     *
+     * @param version the version to set; must not be null.
      */
     public void setVersion(String version) {
         this.version = version;
@@ -79,7 +82,9 @@ public class Umd {
     }
 
     /**
-     * @param firmware the firmware to set
+     * Sets the firmware version of the UMD.
+     *
+     * @param firmware the firmware version to set; must not be null.
      */
     public void setFirmware(String firmware) {
         this.firmware = firmware;
@@ -93,7 +98,9 @@ public class Umd {
     }
 
     /**
-     * @param icon0 the icon0 to set
+     * Sets the icon0 image of the UMD.
+     *
+     * @param icon0 the icon0 image to set; must not be null.
      */
     public void setIcon0(byte[] icon0) {
         this.icon0 = icon0;
@@ -107,12 +114,14 @@ public class Umd {
     }
 
     /**
-     * @param file the fileName to set
+     * Sets the icon0 image of the UMD.
+     *
+     * @param file the fileName to set; must not be null.
      */
     public void setFile(File file) {
         this.file = file;
     }
-    
+
     public String getExtension(){
         String extension = null;
         if(this.getFile().getPath().endsWith(".iso")){
@@ -123,6 +132,6 @@ public class Umd {
         }
         return extension;
     }
-    
-    
+
+
 }

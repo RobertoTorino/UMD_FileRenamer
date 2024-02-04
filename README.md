@@ -28,7 +28,7 @@
 ```
 > **Cleaned-up the code, because a lot of stuff was unnecessary, could be simplified and/or was deprecated.**   
 
-> **Used corretto-18.0.2 to compile the code.**                  
+> **Used Java corretto-17.0.10 to compile the code.**                  
 
 ```xml
 <configuration>
@@ -41,17 +41,18 @@
 
 > **Fixed some typos.**                 
 
-> **If making changes to the repository make sure to run 'mvn clean package' first before running the app again.**              
+> **If making changes to the repository make sure to run `mvn clean install` `mvn clean package` and use the Maven menu first before running the app again.**              
 
-> **Locate the app here: [UMD_FileRenamer](./target) or download from here [Latest](https://github.com/RobertoTorino/UMD_FileRenamer/releases/tag/v1.0.0).**                
+> **Locate the app here: [UMD_FileRenamer](./target) or download from here [Latest](https://github.com/RobertoTorino/UMD_FileRenamer/releases/tag/v1.0.1).**                
 
 ---
 
-
-**To run the app on macOS, locate the app and double click on it or in your terminal type:**
+**To run the app on macOS, locate the app and double-click on it or in your terminal type:**            
 ```bash
-java -jar target/UMD_FileRenamer-1.0.jar
+java -jar ./target/UMD_FileRenamer-1.0.1.jar      
 ```
+
+---
 
 ### Media
 
