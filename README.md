@@ -1,65 +1,27 @@
-# UMD File Renamer
+# UMD File Renamer 1.0.2
 
-### Changes
+### Changes from the original:
+Only tested on macOS!
 
-(only tested on macOS)          :
-> **Replaced the unsafe (security issues) log4j plugin with the latest safe version and added the log4j core dependency.**
+- **Updated the log4j plugin version with the latest (safe) version and added the log4j core dependency.**                 
+- **Updated all other plugins to their latest versions (LTS).**
+- **Added some changes to the Maven pom.xml file to get rid of dependency errors.**                 
+- **Refactored the code.**                   
+- **Now uses Java OpenJDK21 to compile.**              
+- **Changed branch-name from "master" to "main".**              
+- **Fixed some typos.**       
+- **Added JavaDocs to the build.**
+- **Fixed a dependency error that prevented the app from running outside of the development environment.**
 
-```xml
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.17.1</version> <!-- Use the same version as log4j-api -->
-        </dependency>
-```
+- **ToDo:**
+  - Fix the Javadocs.
+  - Fix the GUI code.
 
-```xml
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.17.1</version>
-        </dependency>
-```
+> **If making changes to the repository make sure to run `mvn clean package` and `mvn clean install` and/or use the Maven menu first before running the app again.         
+> For recompile use `mvn clean compile`.**
 
-> **Added some changes to the pom file to get rid of some errors, when building the app, one of them is this:**
-
-```xml
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.5.0</version>
-            </plugin>
-```
-
-> **Cleaned-up the code, because a lot of stuff was unnecessary, could be simplified and/or was deprecated.**
-
-> **Used Java OpenJDK21 to compile the code.**
-
-```xml
-<properties>
-    <java.version>21</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-</properties>
-```
-
-> **Changed branch-name from "master" to "main".**
-
-> **Fixed some typos.**
-
-> **If making changes to the repository make sure to run `mvn clean package` and `mvn clean install` and use the Maven menu first before running the app again. For recompile use `mvn clean compile`.**
-
-> **Locate the app here: [UMD_FileRenamer](./target) or download from here [Latest](https://github.com/RobertoTorino/UMD_FileRenamer/releases/tag/v1.0.2).**
-
----
-
-**To run the app on macOS, locate the app and double-click on it or in your terminal type:**
-
-```bash
-java -jar UMD_FileRenamer-1.0.2.jar         
-```
-
----
-
+> **Locate the app here: [UMD_FileRenamer](./target) or download from here: [latest](https://github.com/RobertoTorino/UMD_FileRenamer/releases/tag/v1.0.2).          
+> To run the app on macOS, double-click on it or in your terminal type:** `java -jar UMD_FileRenamer-1.0.2.jar`.                   
 > **[For the JavaDocs click here.](target/site/index.html)**                        
 
 ---
