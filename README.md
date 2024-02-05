@@ -33,7 +33,7 @@
 
 > **Cleaned-up the code, because a lot of stuff was unnecessary, could be simplified and/or was deprecated.**
 
-> **Used Java OpedJDK21 to compile the code.**
+> **Used Java OpenJDK21 to compile the code.**
 
 ```xml
 <properties>
