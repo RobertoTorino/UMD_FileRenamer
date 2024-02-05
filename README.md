@@ -55,11 +55,12 @@
 **To run the app on macOS, locate the app and double-click on it or in your terminal type:**
 
 ```bash
-java -jar ./target/UMD_FileRenamer-1.0.2.jar      
+java -jar UMD_FileRenamer-1.0.2.jar         
 ```
 
-### JavaDocs        
-[JavaDocs](target/site/index.html)            
+---
+
+> **[For the JavaDocs click here.](target/site/index.html)**                        
 
 ---
 
