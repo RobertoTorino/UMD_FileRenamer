@@ -24,29 +24,47 @@ import java.util.LinkedList;
 
 import static jpcsp.util.Utilities.*;
 
+/**
+ * The type Psf.
+ *
+ * @author wolf003
+ * @version $Id: $Id
+ */
 public class PSF {
+    /**
+     * The constant PSF_IDENT.
+     */
+    public final static int PSF_IDENT = 0x46535000;
+    /**
+     * The constant PSF_DATA_TYPE_BINARY.
+     */
+    public final static int PSF_DATA_TYPE_BINARY = 0;
+    /**
+     * The constant PSF_DATA_TYPE_STRING.
+     */
+    public final static int PSF_DATA_TYPE_STRING = 2;
+    /**
+     * The constant PSF_DATA_TYPE_INT32.
+     */
+    public final static int PSF_DATA_TYPE_INT32 = 4;
+    private final LinkedList<PSFKeyValuePair> pairList;
     private int psfOffset;
     private int size;
-
     private boolean sizeDirty;
     private boolean tablesDirty;
-
     private int ident;
     private int version; // yapspd: 0x1100. actual: 0x0101.
     private int keyTableOffset;
     private int valueTableOffset;
     private int indexEntryCount;
 
-    private final LinkedList<PSFKeyValuePair> pairList;
-
-    public final static int PSF_IDENT = 0x46535000;
-
-    public final static int PSF_DATA_TYPE_BINARY = 0;
-    public final static int PSF_DATA_TYPE_STRING = 2;
-    public final static int PSF_DATA_TYPE_INT32 = 4;
-
+    /**
+     * Instantiates a new Psf.
+     *
+     * @param psfOffset the psf offset
+     */
     public PSF(long psfOffset) {
-        this.psfOffset = (int)psfOffset;
+        this.psfOffset = (int) psfOffset;
         size = 0;
 
         sizeDirty = true;
@@ -59,25 +77,33 @@ public class PSF {
 
     }
 
+    /**
+     * Instantiates a new Psf.
+     */
     public PSF() {
         this(0);
     }
 
-    /** f.position() is undefined after calling this */
+    /**
+     * f.position() is undefined after calling this
+     *
+     * @param f the f
+     * @throws java.io.IOException the io exception
+     */
     public void read(ByteBuffer f) throws IOException {
         psfOffset = f.position();
 
-        ident = (int)readUWord(f);
+        ident = (int) readUWord(f);
         if (ident != PSF_IDENT) {
             System.out.println("Not a valid PSF file (ident=" + String.format("%08X", ident) + ")");
             return;
         }
 
         // header
-        version = (int)readUWord(f); // 0x0101
-        keyTableOffset = (int)readUWord(f);
-        valueTableOffset = (int)readUWord(f);
-        indexEntryCount = (int)readUWord(f);
+        version = (int) readUWord(f); // 0x0101
+        keyTableOffset = (int) readUWord(f);
+        valueTableOffset = (int) readUWord(f);
+        indexEntryCount = (int) readUWord(f);
 
         // index table
         for (int i = 0; i < indexEntryCount; i++) {
@@ -92,7 +118,7 @@ public class PSF {
             pair.key = readStringZ(f);
 
             f.position(psfOffset + valueTableOffset + pair.valueOffset);
-            switch(pair.dataType) {
+            switch (pair.dataType) {
                 case PSF_DATA_TYPE_BINARY:
                     byte[] data = new byte[pair.dataSize];
                     f.get(data);
@@ -114,7 +140,7 @@ public class PSF {
                     break;
 
                 case PSF_DATA_TYPE_INT32:
-                    pair.data = (int)readUWord(f);
+                    pair.data = (int) readUWord(f);
 
                     //System.out.println(String.format("offset=%08X key='%s' int32 %08X %d [len=%d]",
                     //    keyTableOffset + pair.keyOffset, pair.key, pair.data, pair.data, pair.dataSize));
@@ -122,7 +148,7 @@ public class PSF {
 
                 default:
                     System.out.println(String.format("offset=%08X key='%s' unhandled data type %d [len=%d]",
-                        keyTableOffset + pair.keyOffset, pair.key, pair.dataType, pair.dataSize));
+                            keyTableOffset + pair.keyOffset, pair.key, pair.dataType, pair.dataSize));
                     break;
             }
         }
@@ -132,7 +158,12 @@ public class PSF {
         calculateSize();
     }
 
-    // assumes we want to write at the start of the buffer, and that the current buffer position is 0
+    /**
+     * Write.
+     *
+     * @param f the f
+     */
+// assumes we want to write at the start of the buffer, and that the current buffer position is 0
     // doesn't handle psfOffset
     public void write(ByteBuffer f) {
         if (indexEntryCount != pairList.size())
@@ -163,19 +194,19 @@ public class PSF {
 
             f.position(valueTableOffset + pair.valueOffset);
             //System.err.println("PSF write value fp=" + f.position() + " datalen=" + (pair.dataSizePadded) + " top=" + (f.position() + pair.dataSizePadded));
-            switch(pair.dataType) {
+            switch (pair.dataType) {
                 case PSF_DATA_TYPE_BINARY:
-                    f.put((byte[])pair.data);
+                    f.put((byte[]) pair.data);
                     break;
 
                 case PSF_DATA_TYPE_STRING:
-                    String s = (String)pair.data;
+                    String s = (String) pair.data;
                     f.put(s.getBytes(Utilities.charset));
-                    writeByte(f, (byte)0);
+                    writeByte(f, (byte) 0);
                     break;
 
                 case PSF_DATA_TYPE_INT32:
-                    writeWord(f, (Integer)pair.data);
+                    writeWord(f, (Integer) pair.data);
                     break;
 
                 default:
@@ -185,6 +216,12 @@ public class PSF {
         }
     }
 
+    /**
+     * Get object.
+     *
+     * @param key the key
+     * @return the object
+     */
     public Object get(String key) {
         for (PSFKeyValuePair pair : pairList) {
             if (pair.key.equals(key))
@@ -193,14 +230,25 @@ public class PSF {
         return null;
     }
 
+    /**
+     * Gets string.
+     *
+     * @param key the key
+     * @return the string
+     */
     public String getString(String key) {
         Object obj = get(key);
         if (obj != null)
-            return (String)obj;
+            return (String) obj;
         return null;
     }
 
-    /** kxploit patcher tool adds "\nKXPloit Boot by PSP-DEV Team" */
+    /**
+     * kxploit patcher tool adds "\nKXPloit Boot by PSP-DEV Team"
+     *
+     * @param key the key
+     * @return the printable string
+     */
     public String getPrintableString(String key) {
         String rawString = getString(key);
         StringBuilder sb = new StringBuilder();
@@ -214,13 +262,25 @@ public class PSF {
         return sb.toString();
     }
 
+    /**
+     * Gets numeric.
+     *
+     * @param key the key
+     * @return the numeric
+     */
     public int getNumeric(String key) {
         Object obj = get(key);
         if (obj != null)
-            return (Integer)obj;
+            return (Integer) obj;
         return 0;
     }
 
+    /**
+     * Put.
+     *
+     * @param key  the key
+     * @param data the data
+     */
     public void put(String key, byte[] data) {
         PSFKeyValuePair pair = new PSFKeyValuePair(key, PSF_DATA_TYPE_BINARY, data.length, data);
         pairList.add(pair);
@@ -230,6 +290,13 @@ public class PSF {
         indexEntryCount++;
     }
 
+    /**
+     * Put.
+     *
+     * @param key    the key
+     * @param data   the data
+     * @param rawlen the rawlen
+     */
     public void put(String key, String data, int rawlen) {
         byte[] b = (data.getBytes(Utilities.charset));
 
@@ -245,6 +312,12 @@ public class PSF {
         indexEntryCount++;
     }
 
+    /**
+     * Put.
+     *
+     * @param key  the key
+     * @param data the data
+     */
     public void put(String key, String data) {
         byte[] b = (data.getBytes(Utilities.charset));
         //int rawlen = data.length() + 1;
@@ -253,6 +326,12 @@ public class PSF {
         put(key, data, (rawlen + 3) & ~3);
     }
 
+    /**
+     * Put.
+     *
+     * @param key  the key
+     * @param data the data
+     */
     public void put(String key, int data) {
         PSFKeyValuePair pair = new PSFKeyValuePair(key, PSF_DATA_TYPE_INT32, 4, data);
         pairList.add(pair);
@@ -314,6 +393,11 @@ public class PSF {
         }
     }
 
+    /**
+     * Size int.
+     *
+     * @return the int
+     */
     public int size() {
         if (sizeDirty) {
             calculateSize();
@@ -322,6 +406,7 @@ public class PSF {
         return size;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -335,73 +420,127 @@ public class PSF {
         return sb.toString();
     }
 
-    /** used by isLikelyHomebrew() */
+    /**
+     * used by isLikelyHomebrew()
+     */
     private boolean safeEquals(Object a, Object b) {
         return (a == null && b == null) || (a != null && a.equals(b));
     }
 
+    /**
+     * Is likely homebrew boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLikelyHomebrew() {
         boolean homebrew = false;
 
         String disc_version = getString("DISC_VERSION");
         String disc_id = getString("DISC_ID");
         String category = getString("CATEGORY");
-        Integer bootable = (Integer)get("BOOTABLE"); // don't use getNumeric, we also want to know if the entry exists or not
-        Integer region = (Integer)get("REGION");
+        Integer bootable = (Integer) get("BOOTABLE"); // don't use getNumeric, we also want to know if the entry exists or not
+        Integer region = (Integer) get("REGION");
         String psp_system_ver = getString("PSP_SYSTEM_VER");
-        Integer parental_level = (Integer)get("PARENTAL_LEVEL");
+        Integer parental_level = (Integer) get("PARENTAL_LEVEL");
 
         Integer ref_one = Integer.valueOf(1);
         Integer ref_region = Integer.valueOf(32768);
 
         if (safeEquals(disc_version, "1.00") &&
-            safeEquals(disc_id, "UCJS10041") && // loco roco demo, should not false positive since that demo has sys ver 3.40
-            safeEquals(category, "MG") &&
-            safeEquals(bootable, ref_one) &&
-            safeEquals(region, ref_region) &&
-            safeEquals(psp_system_ver, "1.00") &&
-            safeEquals(parental_level, ref_one)) {
+                safeEquals(disc_id, "UCJS10041") && // loco roco demo, should not false positive since that demo has sys ver 3.40
+                safeEquals(category, "MG") &&
+                safeEquals(bootable, ref_one) &&
+                safeEquals(region, ref_region) &&
+                safeEquals(psp_system_ver, "1.00") &&
+                safeEquals(parental_level, ref_one)) {
 
             if (indexEntryCount == 8) {
                 homebrew = true;
             } else if (indexEntryCount == 9 &&
-                safeEquals(get("MEMSIZE"), ref_one)) {
+                    safeEquals(get("MEMSIZE"), ref_one)) {
                 // lua player hm 8
                 homebrew = true;
             }
         } else if (indexEntryCount == 4 &&
-            safeEquals(category, "MG") &&
-            safeEquals(bootable, ref_one) &&
-            safeEquals(region, ref_region)) {
+                safeEquals(category, "MG") &&
+                safeEquals(bootable, ref_one) &&
+                safeEquals(region, ref_region)) {
             homebrew = true;
         }
 
         return homebrew;
     }
 
+    /**
+     * The type Psf key value pair.
+     */
     public static class PSFKeyValuePair {
-        // index table info
+        /**
+         * The Key offset.
+         */
+// index table info
         public int keyOffset;
+        /**
+         * The Unknown 1.
+         */
         public int unknown1;
+        /**
+         * The Data type.
+         */
         public int dataType;
+        /**
+         * The Data size.
+         */
         public int dataSize;
+        /**
+         * The Data size padded.
+         */
         public int dataSizePadded;
+        /**
+         * The Value offset.
+         */
         public int valueOffset;
 
-        // key table info
+        /**
+         * The Key.
+         */
+// key table info
         public String key;
 
-        // data table info
+        /**
+         * The Data.
+         */
+// data table info
         public Object data;
 
+        /**
+         * Instantiates a new Psf key value pair.
+         */
         public PSFKeyValuePair() {
             this(null, 0, 0, null);
         }
 
+        /**
+         * Instantiates a new Psf key value pair.
+         *
+         * @param key      the key
+         * @param dataType the data type
+         * @param dataSize the data size
+         * @param data     the data
+         */
         public PSFKeyValuePair(String key, int dataType, int dataSize, Object data) {
             this(key, dataType, dataSize, (dataSize + 3) & ~3, data);
         }
 
+        /**
+         * Instantiates a new Psf key value pair.
+         *
+         * @param key            the key
+         * @param dataType       the data type
+         * @param dataSize       the data size
+         * @param dataSizePadded the data size padded
+         * @param data           the data
+         */
         public PSFKeyValuePair(String key, int dataType, int dataSize, int dataSizePadded, Object data) {
             this.key = key;
             this.dataType = dataType;
@@ -414,18 +553,27 @@ public class PSF {
             unknown1 = 4;
         }
 
-        /** only reads the index entry, since this class has doesn't know about the psf/key/value offsets */
+        /**
+         * only reads the index entry, since this class has doesn't know about the psf/key/value offsets
+         *
+         * @param f the f
+         * @throws IOException the io exception
+         */
         public void read(ByteBuffer f) throws IOException {
             // index table entry
             keyOffset = readUHalf(f);
             unknown1 = readUByte(f);
             dataType = readUByte(f);
-            dataSize = (int)readUWord(f);
-            dataSizePadded = (int)readUWord(f);
-            valueOffset = (int)readUWord(f);
+            dataSize = (int) readUWord(f);
+            dataSizePadded = (int) readUWord(f);
+            valueOffset = (int) readUWord(f);
         }
 
-        /** only writes the index entry, since this class has doesn't know about the psf/key/value offsets */
+        /**
+         * only writes the index entry, since this class has doesn't know about the psf/key/value offsets
+         *
+         * @param f the f
+         */
         public void write(ByteBuffer f) {
             // index table entry
             writeHalf(f, keyOffset);

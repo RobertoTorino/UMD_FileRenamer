@@ -7,7 +7,10 @@ package com.diegohp.umd.data;
 import java.io.File;
 
 /**
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ * The type Umd.
+ *
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
+ * @version $Id: $Id
  */
 public class Umd {
 
@@ -19,7 +22,10 @@ public class Umd {
     private File file;
 
 
-    public Umd(){
+    /**
+     * Instantiates a new Umd.
+     */
+    public Umd() {
         this.id = "";
         this.title = "";
         this.version = "";
@@ -29,6 +35,8 @@ public class Umd {
     }
 
     /**
+     * Gets id.
+     *
      * @return the id
      */
     public String getId() {
@@ -36,6 +44,8 @@ public class Umd {
     }
 
     /**
+     * Sets id.
+     *
      * @param id the id to set
      */
     public void setId(String id) {
@@ -43,6 +53,8 @@ public class Umd {
     }
 
     /**
+     * Gets title.
+     *
      * @return the title
      */
     public String getTitle() {
@@ -59,6 +71,8 @@ public class Umd {
     }
 
     /**
+     * Gets version.
+     *
      * @return the version
      */
     public String getVersion() {
@@ -75,6 +89,8 @@ public class Umd {
     }
 
     /**
+     * Gets firmware.
+     *
      * @return the firmware
      */
     public String getFirmware() {
@@ -91,6 +107,8 @@ public class Umd {
     }
 
     /**
+     * Get icon 0 byte [ ].
+     *
      * @return the icon0
      */
     public byte[] getIcon0() {
@@ -107,6 +125,8 @@ public class Umd {
     }
 
     /**
+     * Gets file.
+     *
      * @return the fileName
      */
     public File getFile() {
@@ -122,12 +142,16 @@ public class Umd {
         this.file = file;
     }
 
-    public String getExtension(){
+    /**
+     * Gets extension.
+     *
+     * @return the extension
+     */
+    public String getExtension() {
         String extension = null;
-        if(this.getFile().getPath().endsWith(".iso")){
+        if (this.getFile().getPath().endsWith(".iso")) {
             extension = ".iso";
-        }
-        else if(this.getFile().getPath().endsWith(".cso")){
+        } else if (this.getFile().getPath().endsWith(".cso")) {
             extension = ".cso";
         }
         return extension;

@@ -1,4 +1,3 @@
-
 package com.diegohp.umd.renamer.ui;
 
 import com.diegohp.swing.ListTableModel;
@@ -6,9 +5,8 @@ import com.diegohp.swing.SwingHelper;
 import com.diegohp.umd.data.Umd;
 import com.diegohp.umd.data.UmdDAO;
 import com.diegohp.umd.filerenamer.logic.UmdRenamerLogic;
-
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.io.File;
@@ -19,9 +17,40 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ * The type Renamer j frame.
+ *
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
+ * @version $Id: $Id
  */
 public class RenamerJFrame extends javax.swing.JFrame {
+
+    // End of variables declaration//GEN-END:variables
+    private static final Logger logger = LogManager.getLogger(UmdDAO.class);
+    private final UmdRenamerLogic umdRenamerLogic;
+    private final ListTableModel<Umd> umdListTableModel;
+
+    /**
+     * Renames all PSP games.
+     */
+    private javax.swing.JButton jButtonRenameAll;
+    private javax.swing.JButton jButtonUseTitleChanges;
+    private javax.swing.JLabel jLabelActualFolder;
+    private javax.swing.JLabel jLabelIcon0;
+    private javax.swing.JTable jTablePSPGames;
+    private javax.swing.JTextField jTextFieldFirmware;
+    private javax.swing.JTextField jTextFieldId;
+    private javax.swing.JTextField jTextFieldTitle;
+    private javax.swing.JTextField jTextFieldVersion;
+
+    /**
+     * The currently selected UMD (Universal Media Disc) in the application.
+     */
+    private Umd umdSelected;
+
+    /**
+     * The selected directory for the discs.
+     */
+    private File startDirectory;
 
     /**
      * Creates new form RenamerJFrame
@@ -30,7 +59,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
 
         this.umdRenamerLogic = new UmdRenamerLogic();
         this.umdRenamerLogic.setUmdDAO(new UmdDAO());
-        this.umdListTableModel = new ListTableModel<Umd>() {
+        this.umdListTableModel = new ListTableModel<>() {
 
             @Override
             public Object getValueAt(int row, int col) {
@@ -67,10 +96,10 @@ public class RenamerJFrame extends javax.swing.JFrame {
         this.initComponents();
 
         this.jTablePSPGames.getSelectionModel().addListSelectionListener(lse -> {
-            if(!lse.getValueIsAdjusting()){
+            if (!lse.getValueIsAdjusting()) {
                 ListSelectionModel model = jTablePSPGames.getSelectionModel();
-                if(model.getLeadSelectionIndex() >= 0){
-                    umdSelected = ((ListTableModel<Umd>)jTablePSPGames.getModel()).getObjectAt(model.getLeadSelectionIndex());
+                if (model.getLeadSelectionIndex() >= 0) {
+                    umdSelected = ((ListTableModel<Umd>) jTablePSPGames.getModel()).getObjectAt(model.getLeadSelectionIndex());
                     loadSelectedUmd();
                     jButtonUseTitleChanges.setEnabled(true);
                     logger.info("Selected PSP game from table with ID = " + umdSelected.getId());
@@ -79,22 +108,45 @@ public class RenamerJFrame extends javax.swing.JFrame {
         });
     }
 
-    private void loadSelectedUmd(){
-        if(this.umdSelected != null){
+    /**
+     * The entry point of application.
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // Set the system property to opt-out of secure coding for restorable state
+        System.setProperty("apple.awt.application.supportsSecureRestorableState", "false");
+        /*
+         * Set the Nimbus look and feel
+         */
+        //<editor-fold default-state="collapsed" desc=" Look and feel setting code (optional) ">
+        try {
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /*
+         * Create and display the form
+         */
+        java.awt.EventQueue.invokeLater(() -> new RenamerJFrame().setVisible(true));
+    }
+
+    private void loadSelectedUmd() {
+        if (this.umdSelected != null) {
             logger.info("Loading PSP game with ID = " + this.umdSelected.getId());
             this.jTextFieldId.setText(this.umdSelected.getId());
             this.jTextFieldTitle.setText(this.umdSelected.getTitle());
             this.jTextFieldVersion.setText(this.umdSelected.getVersion());
             this.jTextFieldFirmware.setText(this.umdSelected.getFirmware());
-            if(this.umdSelected.getIcon0() != null){
+            if (this.umdSelected.getIcon0() != null) {
                 this.jLabelIcon0.setIcon(new ImageIcon(this.umdSelected.getIcon0()));
-            }
-            else{
+            } else {
                 logger.warn("No Icon0 found. Setting the default one to be displayed");
                 this.jLabelIcon0.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/com/diegohp/umd/renamer/ui/icon0.png"))));
             }
-        }
-        else{
+        } else {
             logger.info("No PSP game selected. Cleaning properties");
             this.jTextFieldId.setText("");
             this.jTextFieldTitle.setText("");
@@ -104,6 +156,9 @@ public class RenamerJFrame extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Ask start directory.
+     */
     public void askStartDirectory() {
 
         logger.info("Asking for directory were games files are located");
@@ -159,7 +214,7 @@ public class RenamerJFrame extends javax.swing.JFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
+    // <editor-fold default-state="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     // <editor-fold default-state="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -221,51 +276,51 @@ public class RenamerJFrame extends javax.swing.JFrame {
         org.jdesktop.layout.GroupLayout jPanelInformationLayout = new org.jdesktop.layout.GroupLayout(jPanelInformation);
         jPanelInformation.setLayout(jPanelInformationLayout);
         jPanelInformationLayout.setHorizontalGroup(
-            jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelInformationLayout.createSequentialGroup()
-                .add(14, 14, 14)
-                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelTitle)
-                    .add(jLabelFirmware)
-                    .add(jLabelId)
-                    .add(jLabelVersion))
-                .add(18, 18, 18)
-                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanelInformationLayout.createSequentialGroup()
-                        .add(jTextFieldId, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE))
-                    .add(jPanelInformationLayout.createSequentialGroup()
-                        .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanelInformationLayout.createSequentialGroup()
-                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                    .add(jTextFieldFirmware, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                    .add(jTextFieldVersion))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(jButtonUseTitleChanges))
-                            .add(jTextFieldTitle))
-                        .addContainerGap())))
+                jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jPanelInformationLayout.createSequentialGroup()
+                                .add(14, 14, 14)
+                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(jLabelTitle)
+                                        .add(jLabelFirmware)
+                                        .add(jLabelId)
+                                        .add(jLabelVersion))
+                                .add(18, 18, 18)
+                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(jPanelInformationLayout.createSequentialGroup()
+                                                .add(jTextFieldId, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                                .add(0, 0, Short.MAX_VALUE))
+                                        .add(jPanelInformationLayout.createSequentialGroup()
+                                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                                        .add(jPanelInformationLayout.createSequentialGroup()
+                                                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                                                                        .add(jTextFieldFirmware, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                                                        .add(jTextFieldVersion))
+                                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .add(jButtonUseTitleChanges))
+                                                        .add(jTextFieldTitle))
+                                                .addContainerGap())))
         );
         jPanelInformationLayout.setVerticalGroup(
-            jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelInformationLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextFieldId, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabelId))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabelTitle)
-                    .add(jTextFieldTitle, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(6, 6, 6)
-                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabelVersion)
-                    .add(jTextFieldVersion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jTextFieldFirmware, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabelFirmware)
-                    .add(jButtonUseTitleChanges))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jPanelInformationLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                        .add(jTextFieldId, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(jLabelId))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                        .add(jLabelTitle)
+                                        .add(jTextFieldTitle, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .add(6, 6, 6)
+                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                        .add(jLabelVersion)
+                                        .add(jTextFieldVersion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jPanelInformationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                        .add(jTextFieldFirmware, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(jLabelFirmware)
+                                        .add(jButtonUseTitleChanges))
+                                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelIcon.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("psp_game_icon"))); // NOI18N
@@ -276,18 +331,18 @@ public class RenamerJFrame extends javax.swing.JFrame {
         org.jdesktop.layout.GroupLayout jPanelIconLayout = new org.jdesktop.layout.GroupLayout(jPanelIcon);
         jPanelIcon.setLayout(jPanelIconLayout);
         jPanelIconLayout.setHorizontalGroup(
-            jPanelIconLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelIconLayout.createSequentialGroup()
-                .add(42, 42, 42)
-                .add(jLabelIcon0)
-                .addContainerGap(46, Short.MAX_VALUE))
+                jPanelIconLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jPanelIconLayout.createSequentialGroup()
+                                .add(42, 42, 42)
+                                .add(jLabelIcon0)
+                                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanelIconLayout.setVerticalGroup(
-            jPanelIconLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelIconLayout.createSequentialGroup()
-                .add(26, 26, 26)
-                .add(jLabelIcon0)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanelIconLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jPanelIconLayout.createSequentialGroup()
+                                .add(26, 26, 26)
+                                .add(jLabelIcon0)
+                                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelTableOfGames.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("list_of_psp_games"))); // NOI18N
@@ -313,45 +368,45 @@ public class RenamerJFrame extends javax.swing.JFrame {
         org.jdesktop.layout.GroupLayout jPanelTableOfGamesLayout = new org.jdesktop.layout.GroupLayout(jPanelTableOfGames);
         jPanelTableOfGames.setLayout(jPanelTableOfGamesLayout);
         jPanelTableOfGamesLayout.setHorizontalGroup(
-            jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jScrollPane1))
-                    .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                        .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                                .add(jButtonChangeFolder)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jButtonRenameAll))
-                            .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                                .addContainerGap()
+                jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
                                 .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                                        .add(jLabelActualFolderLabel)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(jLabelActualFolder))
-                                    .add(jLabelNote))))
-                        .add(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .add(jScrollPane1))
+                                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
+                                                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
+                                                                .add(jButtonChangeFolder)
+                                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                                                .add(jButtonRenameAll))
+                                                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                                                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
+                                                                                .add(jLabelActualFolderLabel)
+                                                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                                                                .add(jLabelActualFolder))
+                                                                        .add(jLabelNote))))
+                                                .add(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())
         );
         jPanelTableOfGamesLayout.setVerticalGroup(
-            jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelTableOfGamesLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabelActualFolderLabel)
-                    .add(jLabelActualFolder))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButtonChangeFolder)
-                    .add(jButtonRenameAll))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 132, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jLabelNote)
-                .add(54, 54, 54))
+                jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(jPanelTableOfGamesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                        .add(jLabelActualFolderLabel)
+                                        .add(jLabelActualFolder))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jPanelTableOfGamesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                        .add(jButtonChangeFolder)
+                                        .add(jButtonRenameAll))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 132, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jLabelNote)
+                                .add(54, 54, 54))
         );
 
         fileMenu.setMnemonic('f');
@@ -379,27 +434,27 @@ public class RenamerJFrame extends javax.swing.JFrame {
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(6, 6, 6)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(jPanelIcon, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanelInformation, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(jPanelTableOfGames, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(layout.createSequentialGroup()
+                                .add(6, 6, 6)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(layout.createSequentialGroup()
+                                                .add(jPanelIcon, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                                .add(jPanelInformation, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .add(jPanelTableOfGames, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanelTableOfGames, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 263, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanelInformation, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanelIcon, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .add(0, 13, Short.MAX_VALUE))
+                layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .add(jPanelTableOfGames, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 263, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                        .add(jPanelInformation, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(jPanelIcon, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .add(0, 13, Short.MAX_VALUE))
         );
 
         pack();
@@ -419,13 +474,13 @@ public class RenamerJFrame extends javax.swing.JFrame {
         String updatedName = this.jTextFieldTitle.getText();
         String invalidChars = "\\/:*?\"<>|™";
         boolean charReplaced = false;
-        for(Character c : invalidChars.toCharArray()){
-            if(updatedName.contains(c.toString())){
+        for (Character c : invalidChars.toCharArray()) {
+            if (updatedName.contains(c.toString())) {
                 updatedName = updatedName.replace(c.toString(), "");
                 charReplaced = true;
             }
         }
-        if(charReplaced){
+        if (charReplaced) {
             logger.warn("Some characters were replaced to avoid problems with the file system");
             ResourceBundle resourceBundle = ResourceBundle.getBundle("com/diegohp/umd/renamer/ui/resources");
             SwingHelper.showInformationMessage(resourceBundle.getString("chars_replaced_title"), resourceBundle.getString("chars_replaced"));
@@ -438,16 +493,15 @@ public class RenamerJFrame extends javax.swing.JFrame {
     private void jButtonRenameAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRenameAllActionPerformed
         logger.info("Renaming all file games...");
         ResourceBundle resourceBundle = ResourceBundle.getBundle("com/diegohp/umd/renamer/ui/resources");
-        try{
-            for(Umd umd : this.umdListTableModel.getObjects()){
+        try {
+            for (Umd umd : this.umdListTableModel.getObjects()) {
                 String formattedName = this.umdRenamerLogic.getFormattedName(umd);
                 this.umdRenamerLogic.rename(umd, this.startDirectory.getPath(), formattedName);
             }
             logger.info("All file renamed!");
             this.umdListTableModel.fireTableDataChanged();
             SwingHelper.showInformationMessage(resourceBundle.getString("files_rename_success_title"), resourceBundle.getString("files_rename_success"));
-        }
-        catch(Throwable t){
+        } catch (Throwable t) {
             logger.error("Error during renaming files.", t);
             SwingHelper.showInformationMessage(resourceBundle.getString("error_renaming_files"), t.toString());
         }
@@ -457,44 +511,4 @@ public class RenamerJFrame extends javax.swing.JFrame {
         AboutJDialog dialog = new AboutJDialog(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // Set the system property to opt-out of secure coding for restorable state
-        System.setProperty("apple.awt.application.supportsSecureRestorableState", "false");
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold default-state="collapsed" desc=" Look and feel setting code (optional) ">
-        try {
-            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RenamerJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(() -> new RenamerJFrame().setVisible(true));
-    }
-
-    private javax.swing.JButton jButtonRenameAll;
-    private javax.swing.JButton jButtonUseTitleChanges;
-    private javax.swing.JLabel jLabelActualFolder;
-    private javax.swing.JLabel jLabelIcon0;
-    private javax.swing.JTable jTablePSPGames;
-    private javax.swing.JTextField jTextFieldFirmware;
-    private javax.swing.JTextField jTextFieldId;
-    private javax.swing.JTextField jTextFieldTitle;
-    private javax.swing.JTextField jTextFieldVersion;
-    // End of variables declaration//GEN-END:variables
-    private static final Logger logger = LogManager.getLogger(UmdDAO.class);
-
-    private final UmdRenamerLogic umdRenamerLogic;
-    private final ListTableModel<Umd> umdListTableModel;
-    private Umd umdSelected;
-    private File startDirectory;
 }

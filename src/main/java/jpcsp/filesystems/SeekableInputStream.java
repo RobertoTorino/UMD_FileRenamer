@@ -23,9 +23,9 @@ import java.io.InputStream;
 
 /**
  * A SeekableInputStream that extends InputStream and implements SeekableDataInput.
- * @author gigaherz: community developer for psp and other consoles.
+ *
+ * @author gigaherz : community developer for psp and other consoles.
  */
-
 public abstract class SeekableInputStream extends InputStream implements SeekableDataInput {
 
     @Override

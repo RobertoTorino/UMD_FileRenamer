@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implements a {@link ComboBoxModel} based on a {@link List} as container.
+ * This class implements a {@link javax.swing.ComboBoxModel} based on a {@link java.util.List} as container.
  *
  * @param <O> Class that defines the type of the container list.
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
  * @version 1.0
  */
-
 public final class ListComboBoxModel<O> extends AbstractListModel<O> implements MutableComboBoxModel<O>, Serializable {
 
     private final List<O> objects;
@@ -25,10 +24,16 @@ public final class ListComboBoxModel<O> extends AbstractListModel<O> implements 
         this.objects = new ArrayList<>();
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Object getSelectedItem() {
+        return selectedObject;
+    }
+
     /**
-     * Set the value of the selected item. The selected item may be null.
+     * {@inheritDoc}
      *
-     * @param anObject The combo box value or null for no selection.
+     * Set the value of the selected item. The selected item may be null.
      */
     @Override
     public void setSelectedItem(Object anObject) {
@@ -46,16 +51,13 @@ public final class ListComboBoxModel<O> extends AbstractListModel<O> implements 
         }
     }
 
-    @Override
-    public Object getSelectedItem() {
-        return selectedObject;
-    }
-
+    /** {@inheritDoc} */
     @Override
     public int getSize() {
         return objects.size();
     }
 
+    /** {@inheritDoc} */
     @Override
     public O getElementAt(int index) {
         if (index >= 0 && index < objects.size())
@@ -64,6 +66,7 @@ public final class ListComboBoxModel<O> extends AbstractListModel<O> implements 
             return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
     public void addElement(Object anObject) {
@@ -74,6 +77,7 @@ public final class ListComboBoxModel<O> extends AbstractListModel<O> implements 
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
     public void insertElementAt(Object anObject, int index) {
@@ -81,6 +85,7 @@ public final class ListComboBoxModel<O> extends AbstractListModel<O> implements 
         fireIntervalAdded(this, index, index);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void removeElementAt(int index) {
         if (getElementAt(index) == selectedObject) {
@@ -96,6 +101,7 @@ public final class ListComboBoxModel<O> extends AbstractListModel<O> implements 
         fireIntervalRemoved(this, index, index);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void removeElement(Object anObject) {
         for (int i = 0; i < objects.size(); i++) {

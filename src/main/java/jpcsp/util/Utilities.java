@@ -27,9 +27,40 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Utilities.
+ *
+ * @author wolf003
+ * @version $Id: $Id
+ */
 public class Utilities {
+    /**
+     * The constant charset.
+     */
     public static final Charset charset = StandardCharsets.UTF_8;
+    /**
+     * Read a string from memory.
+     * The string ends when the maximal length is reached or a '\0' byte is found.
+     * The memory bytes are interpreted as UTF-8 bytes to form the string.
+     */
 
+    ByteBuffer mem = ByteBuffer.allocate(1024);
+    /**
+     * The Address.
+     */
+    int address = 0;
+    /**
+     * The N.
+     */
+    int n = 10;
+
+    /**
+     * Format string string.
+     *
+     * @param type      the type
+     * @param oldstring the oldstring
+     * @return the string
+     */
     public static String formatString(String type, String oldstring) {
         int counter = 0;
         if (type.equals("byte")) {
@@ -51,40 +82,100 @@ public class Utilities {
 
     }
 
+    /**
+     * Integer to bin string.
+     *
+     * @param value the value
+     * @return the string
+     */
     public static String integerToBin(int value) {
         return Long.toBinaryString(0x0000000100000000L | ((value) & 0x00000000FFFFFFFFL)).substring(1);
     }
 
+    /**
+     * Integer to hex string.
+     *
+     * @param value the value
+     * @return the string
+     */
     public static String integerToHex(int value) {
         return Integer.toHexString(0x100 | value).substring(1).toUpperCase();
     }
 
+    /**
+     * Integer to hex short string.
+     *
+     * @param value the value
+     * @return the string
+     */
     public static String integerToHexShort(int value) {
         return Integer.toHexString(0x10000 | value).substring(1).toUpperCase();
     }
 
+    /**
+     * Read u word long.
+     *
+     * @param f the f
+     * @return the long
+     * @throws java.io.IOException the io exception
+     */
     public static long readUWord(SeekableDataInput f) throws IOException {
         long l = (f.readUnsignedByte() | (f.readUnsignedByte() << 8) | (f.readUnsignedByte() << 16) | ((long) f.readUnsignedByte() << 24));
         return (l & 0xFFFFFFFFL);
     }
 
+    /**
+     * Read u byte int.
+     *
+     * @param f the f
+     * @return the int
+     * @throws java.io.IOException the io exception
+     */
     public static int readUByte(SeekableDataInput f) throws IOException {
         return f.readUnsignedByte();
     }
 
+    /**
+     * Read u half int.
+     *
+     * @param f the f
+     * @return the int
+     * @throws java.io.IOException the io exception
+     */
     public static int readUHalf(SeekableDataInput f) throws IOException {
         return f.readUnsignedByte() | (f.readUnsignedByte() << 8);
     }
 
+    /**
+     * Read word int.
+     *
+     * @param f the f
+     * @return the int
+     * @throws java.io.IOException the io exception
+     */
     public static int readWord(SeekableDataInput f) throws IOException {
         //readByte() isn't more correct? (already exists one readUWord() method to unsigned values)
         return (f.readUnsignedByte() | (f.readUnsignedByte() << 8) | (f.readUnsignedByte() << 16) | (f.readUnsignedByte() << 24));
     }
 
+    /**
+     * Skip unknown.
+     *
+     * @param buf    the buf
+     * @param length the length
+     * @throws java.io.IOException the io exception
+     */
     public static void skipUnknown(ByteBuffer buf, int length) throws IOException {
         buf.position(buf.position() + length);
     }
 
+    /**
+     * Read string z string.
+     *
+     * @param buf the buf
+     * @return the string
+     * @throws java.io.IOException the io exception
+     */
     public static String readStringZ(ByteBuffer buf) throws IOException {
         StringBuilder sb = new StringBuilder();
         byte b;
@@ -97,6 +188,14 @@ public class Utilities {
         return sb.toString();
     }
 
+    /**
+     * Read string nz string.
+     *
+     * @param buf the buf
+     * @param n   the n
+     * @return the string
+     * @throws java.io.IOException the io exception
+     */
     public static String readStringNZ(ByteBuffer buf, int n) throws IOException {
         StringBuilder sb = new StringBuilder();
         byte b;
@@ -109,45 +208,88 @@ public class Utilities {
     }
 
     /**
-     * Read a string from memory.
-     * The string ends when the maximal length is reached or a '\0' byte is found.
-     * The memory bytes are interpreted as UTF-8 bytes to form the string.
+     * Write string z.
+     *
+     * @param buf the buf
+     * @param s   the s
      */
-
-    ByteBuffer mem = ByteBuffer.allocate(1024);
-    int address = 0;
-    int n = 10;
-
     public static void writeStringZ(ByteBuffer buf, String s) {
         buf.put(s.getBytes());
         buf.put((byte) 0);
     }
 
+    /**
+     * Gets unsigned byte.
+     *
+     * @param bb the bb
+     * @return the unsigned byte
+     * @throws java.io.IOException the io exception
+     */
     public static short getUnsignedByte(ByteBuffer bb) throws IOException {
         return ((short) (bb.get() & 0xff));
     }
 
+    /**
+     * Put unsigned byte.
+     *
+     * @param bb    the bb
+     * @param value the value
+     */
     public static void putUnsignedByte(ByteBuffer bb, int value) {
         bb.put((byte) (value & 0xFF));
     }
 
+    /**
+     * Read u byte short.
+     *
+     * @param buf the buf
+     * @return the short
+     * @throws java.io.IOException the io exception
+     */
     public static short readUByte(ByteBuffer buf) throws IOException {
         return getUnsignedByte(buf);
     }
 
+    /**
+     * Read u half int.
+     *
+     * @param buf the buf
+     * @return the int
+     * @throws java.io.IOException the io exception
+     */
     public static int readUHalf(ByteBuffer buf) throws IOException {
         return getUnsignedByte(buf) | (getUnsignedByte(buf) << 8);
     }
 
+    /**
+     * Read u word long.
+     *
+     * @param buf the buf
+     * @return the long
+     * @throws java.io.IOException the io exception
+     */
     public static long readUWord(ByteBuffer buf) throws IOException {
         long l = (getUnsignedByte(buf) | (getUnsignedByte(buf) << 8) | (getUnsignedByte(buf) << 16) | ((long) getUnsignedByte(buf) << 24));
         return (l & 0xFFFFFFFFL);
     }
 
+    /**
+     * Read word int.
+     *
+     * @param buf the buf
+     * @return the int
+     * @throws java.io.IOException the io exception
+     */
     public static int readWord(ByteBuffer buf) throws IOException {
         return (getUnsignedByte(buf) | (getUnsignedByte(buf) << 8) | (getUnsignedByte(buf) << 16) | (getUnsignedByte(buf) << 24));
     }
 
+    /**
+     * Write word.
+     *
+     * @param buf   the buf
+     * @param value the value
+     */
     public static void writeWord(ByteBuffer buf, long value) {
         putUnsignedByte(buf, (int) (value));
         putUnsignedByte(buf, (int) (value >> 8));
@@ -155,15 +297,34 @@ public class Utilities {
         putUnsignedByte(buf, (int) (value >> 24));
     }
 
+    /**
+     * Write half.
+     *
+     * @param buf   the buf
+     * @param value the value
+     */
     public static void writeHalf(ByteBuffer buf, int value) {
         putUnsignedByte(buf, value);
         putUnsignedByte(buf, value >> 8);
     }
 
+    /**
+     * Write byte.
+     *
+     * @param buf   the buf
+     * @param value the value
+     */
     public static void writeByte(ByteBuffer buf, int value) {
         putUnsignedByte(buf, value);
     }
 
+    /**
+     * Parse address int.
+     *
+     * @param value the value
+     * @return the int
+     * @throws java.lang.NumberFormatException the number format exception
+     */
     public static int parseAddress(String value) throws NumberFormatException {
         int address = 0;
         if (value == null) {
@@ -231,6 +392,12 @@ public class Utilities {
         return value;
     }
 
+    /**
+     * Make pow 2 int.
+     *
+     * @param n the n
+     * @return the int
+     */
     public static int makePow2(int n) {
         --n;
         n = (n >> 1) | n;
@@ -241,10 +408,22 @@ public class Utilities {
         return ++n;
     }
 
+    /**
+     * Byte position buffer.
+     *
+     * @param buffer       the buffer
+     * @param bytePosition the byte position
+     */
     public static void bytePositionBuffer(Buffer buffer, int bytePosition) {
         buffer.position(bytePosition / bufferElementSize(buffer));
     }
 
+    /**
+     * Buffer element size int.
+     *
+     * @param buffer the buffer
+     * @return the int
+     */
     public static int bufferElementSize(Buffer buffer) {
         if (buffer instanceof IntBuffer) {
             return 4;
@@ -253,6 +432,12 @@ public class Utilities {
         return 1;
     }
 
+    /**
+     * Strip nl string.
+     *
+     * @param s the s
+     * @return the string
+     */
     public static String stripNL(String s) {
         if (s != null && s.endsWith("\n")) {
             s = s.substring(0, s.length() - 1);
@@ -268,8 +453,7 @@ public class Utilities {
      * @param inputStream to read into a string
      * @param close       if true, close the input-stream
      * @return a string
-     * @throws java.io.IOException            if thrown on reading the stream
-     * @throws java.lang.NullPointerException if the given input-stream is null
+     * @throws java.io.IOException the io exception
      */
     public static String toString(InputStream inputStream, boolean close) throws IOException {
         if (inputStream == null) {
@@ -293,6 +477,8 @@ public class Utilities {
 
     /**
      * Close closeable. Use this in a final clause.
+     *
+     * @param closeables the closeables
      */
     public static void close(Closeable... closeables) {
         for (Closeable c : closeables) {
@@ -306,6 +492,13 @@ public class Utilities {
         }
     }
 
+    /**
+     * Make value 64 long.
+     *
+     * @param low32  the low 32
+     * @param high32 the high 32
+     * @return the long
+     */
     public static long makeValue64(int low32, int high32) {
         return (((long) high32) << 32) | ((low32) & 0xFFFFFFFFL);
     }

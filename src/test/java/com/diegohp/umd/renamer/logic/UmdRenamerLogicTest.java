@@ -15,7 +15,11 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ * <p>UmdRenamerLogicTest class.</p>
+ *
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
+ * @version $Id: $Id
+ * @since 1.0.2
  */
 public class UmdRenamerLogicTest extends TestCase {
 
@@ -29,6 +33,8 @@ public class UmdRenamerLogicTest extends TestCase {
     }
 
     /**
+     * <p>suite.</p>
+     *
      * @return the suite of tests being tested
      */
     public static Test suite() {
@@ -37,6 +43,8 @@ public class UmdRenamerLogicTest extends TestCase {
 
     /**
      * Rigorous Test :-)
+     *
+     * @throws java.io.IOException if any.
      */
     public void testUmdRenamerLogic() throws IOException {
 

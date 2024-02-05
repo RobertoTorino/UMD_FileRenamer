@@ -23,15 +23,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
+ * The type Iso 9660 handler.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
+ * @version $Id: $Id
  */
 public class Iso9660Handler extends Iso9660Directory {
 
     private final Iso9660Directory internalDir;
 
-    public Iso9660Handler(UmdIsoReader r) throws IOException
-    {
+    /**
+     * Instantiates a new Iso 9660 handler.
+     *
+     * @param r the r
+     * @throws java.io.IOException the io exception
+     */
+    public Iso9660Handler(UmdIsoReader r) throws IOException {
         super(r, 0, 0);
 
         byte[] sector = r.readSector(16);
@@ -50,21 +57,21 @@ public class Iso9660Handler extends Iso9660Directory {
         internalDir = new Iso9660Directory(r, rootLBA, rootSize);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public Iso9660File getEntryByIndex(int index) throws ArrayIndexOutOfBoundsException
-    {
+    public Iso9660File getEntryByIndex(int index) throws ArrayIndexOutOfBoundsException {
         return internalDir.getEntryByIndex(index);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public int getFileIndex(String fileName) throws FileNotFoundException
-    {
+    public int getFileIndex(String fileName) throws FileNotFoundException {
         return internalDir.getFileIndex(fileName);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public String[] getFileList() throws FileNotFoundException
-    {
+    public String[] getFileList() throws FileNotFoundException {
         return internalDir.getFileList();
     }
 }

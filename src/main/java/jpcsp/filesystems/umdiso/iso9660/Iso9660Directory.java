@@ -25,15 +25,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * The type Iso 9660 directory.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
+ * @version $Id: $Id
  */
 public class Iso9660Directory {
 
     private final List<Iso9660File> files;
 
-    public Iso9660Directory(UmdIsoReader r, int directorySector, int directorySize) throws IOException
-    {
+    /**
+     * Instantiates a new Iso 9660 directory.
+     *
+     * @param r               the r
+     * @param directorySector the directory sector
+     * @param directorySize   the directory size
+     * @throws java.io.IOException the io exception
+     */
+    public Iso9660Directory(UmdIsoReader r, int directorySector, int directorySize) throws IOException {
         // parse directory sector
         UmdIsoFile dataStream = new UmdIsoFile(r, directorySector, directorySize);
 
@@ -41,20 +50,18 @@ public class Iso9660Directory {
 
         byte[] b;
 
-        while(directorySize>=1)
-        {
+        while (directorySize >= 1) {
             int entryLength = dataStream.read();
 
             // This is assuming that the padding bytes are always filled with 0's.
-            if(entryLength==0)
-            {
-            	directorySize--;
+            if (entryLength == 0) {
+                directorySize--;
                 continue;
             }
 
-            directorySize-=entryLength;
+            directorySize -= entryLength;
 
-            b = new byte[entryLength-1];
+            b = new byte[entryLength - 1];
             dataStream.read(b);
 
             Iso9660File file = new Iso9660File(b);
@@ -62,18 +69,28 @@ public class Iso9660Directory {
         }
     }
 
-    public Iso9660File getEntryByIndex(int index) throws ArrayIndexOutOfBoundsException
-    {
+    /**
+     * Gets entry by index.
+     *
+     * @param index the index
+     * @return the entry by index
+     * @throws java.lang.ArrayIndexOutOfBoundsException the array index out of bounds exception
+     */
+    public Iso9660File getEntryByIndex(int index) throws ArrayIndexOutOfBoundsException {
         return files.get(index);
     }
 
-    public int getFileIndex(String fileName) throws FileNotFoundException
-    {
-        for(int i=0;i<files.size();i++)
-        {
+    /**
+     * Gets file index.
+     *
+     * @param fileName the file name
+     * @return the file index
+     * @throws java.io.FileNotFoundException the file not found exception
+     */
+    public int getFileIndex(String fileName) throws FileNotFoundException {
+        for (int i = 0; i < files.size(); i++) {
             String file = files.get(i).getFileName();
-            if(file.equalsIgnoreCase(fileName))
-            {
+            if (file.equalsIgnoreCase(fileName)) {
                 return i;
             }
         }
@@ -81,11 +98,15 @@ public class Iso9660Directory {
         throw new FileNotFoundException("File " + fileName + " not found in directory.");
     }
 
-    public String[] getFileList() throws FileNotFoundException
-    {
+    /**
+     * Get file list string [ ].
+     *
+     * @return the string [ ]
+     * @throws java.io.FileNotFoundException the file not found exception
+     */
+    public String[] getFileList() throws FileNotFoundException {
         String[] list = new String[files.size()];
-        for(int i=0;i<files.size();i++)
-        {
+        for (int i = 0; i < files.size(); i++) {
             list[i] = files.get(i).getFileName();
         }
         return list;

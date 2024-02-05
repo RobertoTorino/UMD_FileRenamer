@@ -29,40 +29,46 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 /**
+ * The type Umd iso reader.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
+ * @version $Id: $Id
  */
 public class UmdIsoReader {
 
-    RandomAccessFile fileReader;
     private final HashMap<String, Iso9660File> fileCache = new HashMap<>();
     private final HashMap<String, Iso9660Directory> dirCache = new HashMap<>();
-
-    enum FileFormat {
-        Uncompressed, CompressedCSO, CompressedDAX, // not implemented yet
-        // ...
-        Unknown
-    }
-
+    /**
+     * The File reader.
+     */
+    RandomAccessFile fileReader;
+    /**
+     * The Format.
+     */
     FileFormat format;
-
+    /**
+     * The Num sectors.
+     */
     int numSectors; //
+    /**
+     * The Sector offsets.
+     */
     long[] sectorOffsets; // for CSO/DAX
-
+    /**
+     * The Offset shift.
+     */
     int offsetShift; // for CSO
-
+    /**
+     * The File name.
+     */
     String fileName;
 
-    private int Ubyte(byte b) {
-        return (b) & 255;
-    }
-
-    private int BytesToInt(byte[] bytes, int offset)
-            throws ArrayIndexOutOfBoundsException {
-        return Ubyte(bytes[offset]) | (Ubyte(bytes[offset + 1]) << 8)
-                | (Ubyte(bytes[offset + 2]) << 16) | (bytes[offset + 3] << 24);
-    }
-
+    /**
+     * Instantiates a new Umd iso reader.
+     *
+     * @param umdFilename the umd filename
+     * @throws java.io.IOException the io exception
+     */
     public UmdIsoReader(String umdFilename) throws IOException {
         fileName = umdFilename;
         fileReader = new RandomAccessFile(umdFilename, "r");
@@ -143,18 +149,24 @@ public class UmdIsoReader {
         throw new IOException("Unsupported file format or corrupt file.");
     }
 
+    private int Ubyte(byte b) {
+        return (b) & 255;
+    }
+
+    private int BytesToInt(byte[] bytes, int offset)
+            throws ArrayIndexOutOfBoundsException {
+        return Ubyte(bytes[offset]) | (Ubyte(bytes[offset + 1]) << 8)
+                | (Ubyte(bytes[offset + 2]) << 16) | (bytes[offset + 3] << 24);
+    }
+
     /**
      * Read sequential sectors into a byte array
      *
-     * @param sectorNumber  -
-     *                      the first sector to be read
-     * @param numberSectors -
-     *                      the number of sectors to be read
-     * @param buffer        -
-     *                      the byte array where to write the sectors
-     * @param offset        -
-     *                      offset into the byte array where to start writing
-     * @throws IOException if an I/O error occurs while reading the sector
+     * @param sectorNumber  -                      the first sector to be read
+     * @param numberSectors -                      the number of sectors to be read
+     * @param buffer        -                      the byte array where to write the sectors
+     * @param offset        -                      offset into the byte array where to start writing
+     * @throws java.io.IOException if an I/O error occurs while reading the sector
      */
     public void readSectors(int sectorNumber, int numberSectors, byte[] buffer,
                             int offset) throws IOException {
@@ -180,13 +192,10 @@ public class UmdIsoReader {
     /**
      * Read one sector into a byte array
      *
-     * @param sectorNumber -
-     *                     the sector number to be read
-     * @param buffer       -
-     *                     the byte array where to write
-     * @param offset       -
-     *                     offset into the byte array where to start writing
-     * @throws IOException if an I/O error occurs while reading the sector
+     * @param sectorNumber -                     the sector number to be read
+     * @param buffer       -                     the byte array where to write
+     * @param offset       -                     offset into the byte array where to start writing
+     * @throws java.io.IOException if an I/O error occurs while reading the sector
      */
     public void readSector(int sectorNumber, byte[] buffer, int offset)
             throws IOException {
@@ -249,10 +258,9 @@ public class UmdIsoReader {
     /**
      * Read one sector
      *
-     * @param sectorNumber -
-     *                     the sector number to be read
+     * @param sectorNumber -                     the sector number to be read
      * @return a new byte array of size sectorLength containing the sector
-     * @throws IOException if an I/O error occurs while reading the sector
+     * @throws java.io.IOException if an I/O error occurs while reading the sector
      */
     public byte[] readSector(int sectorNumber) throws IOException {
         byte[] buffer = new byte[2048];
@@ -325,6 +333,13 @@ public class UmdIsoReader {
         return info;
     }
 
+    /**
+     * Gets file.
+     *
+     * @param filePath the file path
+     * @return the file
+     * @throws java.io.IOException the io exception
+     */
     public UmdIsoFile getFile(String filePath) throws IOException {
         int fileStart;
         long fileLength;
@@ -363,6 +378,13 @@ public class UmdIsoReader {
         return new UmdIsoFile(this, fileStart, fileLength);
     }
 
+    /**
+     * List directory string [ ].
+     *
+     * @param filePath the file path
+     * @return the string [ ]
+     * @throws java.io.IOException the io exception
+     */
     public String[] listDirectory(String filePath) throws IOException {
         Iso9660Directory dir = null;
 
@@ -387,6 +409,11 @@ public class UmdIsoReader {
         return dir.getFileList();
     }
 
+    /**
+     * Gets filename.
+     *
+     * @return the filename
+     */
     public String getFilename() {
         return fileName;
     }
@@ -425,6 +452,12 @@ public class UmdIsoReader {
         return null;
     }
 
+    /**
+     * Gets file name.
+     *
+     * @param fileStartSector the file start sector
+     * @return the file name
+     */
     public String getFileName(int fileStartSector) {
         try {
             String[] files = listDirectory("");
@@ -434,6 +467,29 @@ public class UmdIsoReader {
         }
 
         return null;
+    }
+
+    /**
+     * The enum File format.
+     */
+    enum FileFormat {
+        /**
+         * Uncompressed file format.
+         */
+        Uncompressed,
+        /**
+         * Compressed cso file format.
+         */
+        CompressedCSO,
+        /**
+         * Compressed dax file format.
+         */
+        CompressedDAX, // not implemented yet
+        /**
+         * Unknown file format.
+         */
+// ...
+        Unknown
     }
 
 }

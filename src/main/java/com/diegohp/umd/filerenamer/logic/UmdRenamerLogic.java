@@ -12,7 +12,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ * The type Umd renamer logic.
+ *
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
+ * @version $Id: $Id
  */
 public class UmdRenamerLogic {
 
@@ -23,8 +26,11 @@ public class UmdRenamerLogic {
     private UmdDAO umdDAO;
 
     /**
+     * Gets umd.
+     *
      * @param file the fileName to set
-     * @throws IOException if an I/O error occurs while reading the sector
+     * @return the umd
+     * @throws java.io.IOException if an I/O error occurs while reading the sector
      */
     public Umd getUmd(File file) throws IOException {
         if (file != null && !file.isDirectory()) {
@@ -33,6 +39,12 @@ public class UmdRenamerLogic {
         return null;
     }
 
+    /**
+     * Gets formatted name.
+     *
+     * @param umd the umd
+     * @return the formatted name
+     */
     public String getFormattedName(Umd umd) {
         String name = umd.getTitle() + " (" + umd.getId().substring(0, 4) + "-" + umd.getId().substring(4) + ")";
         String invalidChars = "\\/:*?\"<>|™";
@@ -42,6 +54,13 @@ public class UmdRenamerLogic {
         return name;
     }
 
+    /**
+     * Rename.
+     *
+     * @param umd         the umd
+     * @param folder      the folder
+     * @param newFileName the new file name
+     */
     public void rename(Umd umd, String folder, String newFileName) {
         File newFile = new File(folder + File.separator + newFileName + umd.getExtension());
 
@@ -54,6 +73,8 @@ public class UmdRenamerLogic {
     }
 
     /**
+     * Sets umd dao.
+     *
      * @param umdDAO the umdDAO to set
      */
     public void setUmdDAO(UmdDAO umdDAO) {

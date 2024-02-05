@@ -20,9 +20,12 @@ import java.io.Closeable;
 import java.io.DataInput;
 
 /**
+ * This is the Seekable class description.
+ * It represents a class that provides seek operations.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
+ * @version $Id: $Id
  */
-public interface SeekableDataInput extends DataInput,Seekable,Closeable {
+public interface SeekableDataInput extends DataInput, Seekable, Closeable {
 
 }

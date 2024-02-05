@@ -4,11 +4,11 @@
  */
 package com.diegohp.umd.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import jpcsp.filesystems.umdiso.UmdIsoFile;
 import jpcsp.filesystems.umdiso.UmdIsoReader;
 import jpcsp.format.PSF;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,15 +16,28 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ * The type Umd dao.
+ *
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
+ * @version $Id: $Id
  */
 public class UmdDAO {
 
     private static final Logger logger = LogManager.getLogger(UmdDAO.class);
 
+    /**
+     * Instantiates a new Umd dao.
+     */
     public UmdDAO() {
     }
 
+    /**
+     * Gets umd.
+     *
+     * @param file the file
+     * @return the umd
+     * @throws java.io.IOException the io exception
+     */
     public Umd getUmd(File file) throws IOException {
 
         try {

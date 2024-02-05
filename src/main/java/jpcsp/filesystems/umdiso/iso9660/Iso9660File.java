@@ -23,8 +23,10 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
+ * The type Iso 9660 file.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
+ * @version $Id: $Id
  */
 public class Iso9660File {
 
@@ -34,10 +36,12 @@ public class Iso9660File {
     // padding: byte[3]
     private String fileName; //[128+1];
 
-    private int Ubyte(byte b) {
-        return (b) & 255;
-    }
-
+    /**
+     * Instantiates a new Iso 9660 file.
+     *
+     * @param data the data
+     * @throws java.io.IOException the io exception
+     */
     public Iso9660File(byte[] data) throws IOException {
 
         fileLBA = Ubyte(data[1]) | (Ubyte(data[2]) << 8) | (Ubyte(data[3]) << 16) | (data[4] << 24);
@@ -90,22 +94,47 @@ public class Iso9660File {
         return timeZoneName;
     }
 
+    private int Ubyte(byte b) {
+        return (b) & 255;
+    }
+
+    /**
+     * Gets lba.
+     *
+     * @return the lba
+     */
     public int getLBA() {
         return fileLBA;
     }
 
+    /**
+     * Gets size.
+     *
+     * @return the size
+     */
     public int getSize() {
         return fileSize;
     }
 
+    /**
+     * Gets properties.
+     *
+     * @return the properties
+     */
     public int getProperties() {
         return fileProperties;
     }
 
+    /**
+     * Gets file name.
+     *
+     * @return the file name
+     */
     public String getFileName() {
         return fileName;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return fileName;

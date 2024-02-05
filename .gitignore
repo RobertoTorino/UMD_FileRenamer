@@ -16,12 +16,6 @@ Thumbs.db
 # Log file
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 # Package Files #
 *.jar
 *.war
@@ -31,10 +25,16 @@ Thumbs.db
 *.rar
 
 # Avoid ignoring files
-!target/UMD_FileRenamer-1.0.jar
-!target/UMD_FileRenamer-1.0-jar-with-dependencies.zip
+!target/UMD_FileRenamer*
+!repo/com/diegohp/umd/UMD_FileRenamer/1.0/UMD_FileRenamer*
+!repo/com/diegohp/umd/UMD_FileRenamer/1.0.1/UMD_FileRenamer*
+!repo/com/diegohp/umd/UMD_FileRenamer/1.0.2/UMD_FileRenamer*
+!target/original-UMD_FileRenamer-1.0.2.jar
 !/.mvn/wrapper/maven-wrapper.jar
+!repo/org/bolet/jgz/0.2/jgz-0.2.jar
 
 # IntelliJ
 /.idea/
-!/target
+
+# Div
+!/target/

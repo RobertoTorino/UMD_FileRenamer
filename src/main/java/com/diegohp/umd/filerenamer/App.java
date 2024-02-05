@@ -10,11 +10,19 @@ import javax.swing.*;
 
 /**
  * Hello world!
+ *
+ * @author wolf003
+ * @version $Id: $Id
  */
 public class App {
 
     private static final Logger logger = LogManager.getLogger(UmdDAO.class);
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         // Set the system property to opt-out of secure coding for restorable state
         System.setProperty("apple.awt.application.supportsSecureRestorableState", "false");

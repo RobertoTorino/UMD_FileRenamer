@@ -24,22 +24,35 @@ import java.io.EOFException;
 import java.io.IOException;
 
 /**
+ * The type Umd iso file.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
  */
 public class UmdIsoFile extends SeekableInputStream {
+    /**
+     * The constant sectorLength.
+     */
     public static final int sectorLength = 2048;
     private final int startSectorNumber;
+    private final long maxOffset;
+    /**
+     * The Internal reader.
+     */
+    UmdIsoReader internalReader;
     private int currentSectorNumber;
     private long currentOffset;
-    private final long maxOffset;
     private String name;
-
     private byte[] currentSector;
     private int sectorOffset;
 
-    UmdIsoReader internalReader;
-
+    /**
+     * Instantiates a new Umd iso file.
+     *
+     * @param reader        the reader
+     * @param startSector   the start sector
+     * @param lengthInBytes the length in bytes
+     * @throws IOException the io exception
+     */
     public UmdIsoFile(UmdIsoReader reader, int startSector, long lengthInBytes) throws IOException {
         startSectorNumber = startSector;
         currentSectorNumber = startSectorNumber;
@@ -235,6 +248,11 @@ public class UmdIsoFile extends SeekableInputStream {
         return (int) skip(bytes);
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         if (name == null) {
             name = internalReader.getFileName(startSectorNumber);

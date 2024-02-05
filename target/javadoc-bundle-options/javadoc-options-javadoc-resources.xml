@@ -6,11 +6,14 @@
   <tagletArtifacts>
     <tagletArtifact />
   </tagletArtifacts>
+  <links>
+    <link>../apidocs</link>
+  </links>
   <excludePackageNames>
     <excludePackageName>com.sun.*</excludePackageName>
     <excludePackageName>sun.*</excludePackageName>
     <excludePackageName>jdk.*</excludePackageName>
     <excludePackageName>oracle.*</excludePackageName>
   </excludePackageNames>
-  <javadocResourcesDirectory>src/main/javadoc</javadocResourcesDirectory>
+  <javadocResourcesDirectory>src/test/javadoc</javadocResourcesDirectory>
 </javadocOptions>

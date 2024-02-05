@@ -1,4 +1,3 @@
-
 package com.diegohp.swing;
 
 import javax.swing.*;
@@ -6,13 +5,14 @@ import java.io.File;
 
 /**
  * This class brings some shortcuts of Swing User-Interface components.
- * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com>
+ *
+ * @author diegohp (Diego Hernandez Perez) - <a href="mailto:hp.diego@gmail.com">hp.diego@gmail.com></a>
  * @version 1.0
  */
 public final class SwingHelper {
 
     /**
-     * Displays a {@link JOptionPane} as an error message.
+     * Displays a {@link javax.swing.JOptionPane} as an error message.
      *
      * @param title   The title of the dialog.
      * @param message The message inside the dialog.
@@ -22,7 +22,7 @@ public final class SwingHelper {
     }
 
     /**
-     * Displays a {@link JOptionPane} as a warning message.
+     * Displays a {@link javax.swing.JOptionPane} as a warning message.
      *
      * @param title   The title of the dialog.
      * @param message The message inside the dialog.
@@ -32,7 +32,7 @@ public final class SwingHelper {
     }
 
     /**
-     * Displays a {@link JOptionPane} as an information message.
+     * Displays a {@link javax.swing.JOptionPane} as an information message.
      *
      * @param title   The title of the dialog.
      * @param message The message inside the dialog.
@@ -42,11 +42,11 @@ public final class SwingHelper {
     }
 
     /**
-     * Displays a {@link JFileChooser} to select a directory.
+     * Displays a {@link javax.swing.JFileChooser} to select a directory.
      *
      * @param title          The title of the dialog.
      * @param startDirectory The directory where the dialog is initialed opened.
-     * @return The {@link File} object selected, returns null if no directory was selected.
+     * @return The {@link java.io.File} object selected, returns null if no directory was selected.
      */
     public static File chooseDirectory(String title, File startDirectory) {
         JFileChooser chooser = new JFileChooser();

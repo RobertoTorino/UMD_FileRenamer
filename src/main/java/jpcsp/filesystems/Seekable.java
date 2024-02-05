@@ -19,13 +19,28 @@ package jpcsp.filesystems;
 import java.io.IOException;
 
 /**
+ * This is the Seekable class description.
+ * It represents a class that provides seek operations.
  *
- * @author gigaherz: community developer for psp and other consoles.
+ * @author gigaherz : community developer for psp and other consoles.
+ * @version $Id: $Id
  */
 public interface Seekable {
 
+    /**
+     * Length long.
+     *
+     * @return the long
+     * @throws java.io.IOException the io exception
+     */
     long length() throws IOException;
 
+    /**
+     * Seek.
+     *
+     * @param position the position
+     * @throws java.io.IOException the io exception
+     */
     void seek(long position) throws IOException;
 
 }
